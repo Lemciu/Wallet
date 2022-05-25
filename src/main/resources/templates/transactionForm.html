@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buy/Sell</title>
+    <link rel="stylesheet" th:href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div class="center">
+    <div th:replace="fragments :: menu"></div>
+    <div class="content">
+<!--        <form th:action="@{addTransaction}" method="post">-->
+<!--&lt;!&ndash;            co kupujemy, ile, czym placimy i ile to wyjdzie, zeby to automatycznie przeliczalo&ndash;&gt;-->
+<!--            <p>Buy</p>-->
+<!--            <select>-->
+<!--                <option th:each="stock: ${stocks}" th:text="${stock.name}"></option>-->
+<!--            </select>-->
+<!--            <p>Amount</p>-->
+<!--            <input type="number">-->
+<!--            <p>price:</p>-->
+<!--            <select>-->
+<!--                <option th:each="stock: ${stocks}" th:text="${stock.name}"></option>-->
+<!--            </select>-->
+<!--            <p>9999$</p>-->
+<!--            <input type="submit">-->
+<!--        </form>-->
+        <form th:action="@{/get-price}">
+            <p>Buy</p>
+            <select>
+                <option th:each="stock: ${stocks}" th:text="${stock.name}"></option>
+            </select>
+            <p>Amount</p>
+            <input type="number" th:step="0.00000001">
+            <p>płatność</p>
+            </p>
+            <select>
+                <option th:each="stock: ${stocks}" th:text="${stock.name}"></option>
+            </select>
+            <p th:text="${price}"></p>
+            <p>zapytaj o cene</p>
+            <input type="submit">
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>StockName</title>
+    <link rel="stylesheet" th:href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div class="center">
+    <div th:replace="fragments :: menu"></div>
+    <div class="content">
+        <div class="stockCenter">
+            <div class="stockHeader">
+                <div>
+                    <h1 id="stockName">Bitcoin<img src="/img/starEmpty.png"></h1>
+                    <p id="stockSymbol" th:text="${stock.symbol}"></p>
+                </div>
+                <div>
+                    <h3>Price</h3>
+                    <p id="stockPrice"
+                       th:text="|$*{#numbers.formatDecimal(stock.currentPrice, 1, 'COMMA', 2, 'POINT')}|"></p>
+                    <p th:text="|*{#numbers.formatDecimal(stock.percentChange24H, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                </div>
+                <div>
+                    <button>Buy</button>
+                    <button>Sell</button>
+                </div>
+            </div>
+
+            <div class="stockContent">
+                <div class="priceStats">
+                    <table class="table table-borderless" id="priceStatsTable">
+                        <thead>
+                        <th>PRICE STATS</th>
+                        <tr>
+                            <td>Price</td>
+                            <td th:text="|$${stock.currentPrice} / *{#numbers.formatDecimal(stock.percentChange24H, 1, 'COMMA', 2, 'POINT')}%|"></td>
+                        </tr>
+                        <tr>
+                            <td>Volume24H</td>
+                            <td th:text="|$*{#numbers.formatDecimal(stock.volume24H, 1, 'COMMA', 0, 'POINT')}|"></td>
+                        </tr>
+                        <tr>
+                            <td>volumeChange24H</td>
+                            <td th:text="|*{#numbers.formatDecimal(stock.volumeChange24H, 1, 'COMMA', 2, 'POINT')}%|"></td>
+                        </tr>
+                        </thead>
+                    </table>
+
+                    <div class="supply">
+                        <table class="table table-borderless" id="supplyTable">
+                            <th>SUPPLY</th>
+                            <tr>
+                                <td>Circulating supply</td>
+                                <td th:text="*{#numbers.formatDecimal(stock.circulatingSupply, 1, 'COMMA', 0, 'POINT')}"></td>
+                            </tr>
+                            <tr>
+                                <td>Total supply</td>
+                                <td th:text="*{#numbers.formatDecimal(stock.totalSupply, 1, 'COMMA', 0, 'POINT')}"></td>
+                            </tr>
+                            <tr>
+                                <td>Max supply</td>
+                                <td th:text="*{#numbers.formatDecimal(stock.maxSupply, 1, 'COMMA', 0, 'POINT')}"></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="marketCap">
+                        <table class="table table-borderless" id="marketCapTable">
+                            <th>MARKET CAP</th>
+                            <tr>
+                                <td>MarketCap</td>
+                                <td th:text="|$*{#numbers.formatDecimal(stock.marketCap, 1, 'COMMA', 0, 'POINT')}|"></td>
+                            <tr>
+                                <td>Market cap rank</td>
+                                <td th:text="|#${stock.marketCapRank}|"></td>
+                            </tr>
+                            <tr>
+                                <td>Market cap dominance</td>
+                                <td th:text="|*{#numbers.formatDecimal(stock.marketCapDominance, 1, 'COMMA', 2, 'POINT')}%|"></td>
+                            </tr>
+                            <tr>
+                                <td>Fully Diluted market cap</td>
+                                <td th:text="|$*{#numbers.formatDecimal(stock.fullyDilutedMarketCap, 1, 'COMMA', 0, 'POINT')}|"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

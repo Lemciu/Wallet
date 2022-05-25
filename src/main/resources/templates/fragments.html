@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">>
+<head>
+    <meta charset="UTF-8">
+    <title>Fragmenty</title>
+</head>
+<body>
+<div class="menu" th:fragment="menu">
+    <ul class="menulist">
+        <a class="navbarOption" th:href="@{/}">Dashboard</a>
+        <a class="navbarOption" th:href="@{/market}"href="#">Market</a>
+        <a class="navbarOption" th:href="@{/savings}">Savings</a>
+        <a class="navbarOption" th:href="@{/investments}">Investments</a>
+        <a class="navbarOption" th:href="@{/notifications}">Notification</a>
+    </ul>
+</div>
+<p>#2f2e33 - Blue Back</p>
+<p>#d5d6d2 - Cool Gray</p>
+<p>#ffffff -  White</p>
+<p>#3a5199 - Cobalt</p>
+</body>
+</html>

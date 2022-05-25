@@ -1,0 +1,188 @@
+.center {
+        display: flex;
+        flex-direction: row;
+}
+.content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: white;
+    background-color: #d5d6d2;
+    width: 100%;
+}
+.notificationMain {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.mainMarket {
+    width: 100%;
+    margin: 30px;
+}
+.mainMarket h3 {
+    color: #2f2e33;
+}
+.marketHead {
+    /*margin-left: 30px;*/
+    /*margin-top: 30px;*/
+    display: flex;
+    flex-direction: column;
+}
+.investHeader {
+    /*display: flex;*/
+    /*flex-direction: row;*/
+}
+.notificationHeader {
+}
+.notifications {
+    /*width: 100%;*/
+}
+.content {
+    /*padding: 100px;*/
+}
+.cryptoBalance {
+    margin-top: 50px;
+    margin-left: 50px;
+}
+#subTitle {
+    font-size: x-small;
+}
+.investmentMain {
+    width: 100%;
+}
+/*.cryptoTable {*/
+/*    width: 100%;*/
+/*}*/
+.cryptoTable {
+    /*margin: 30px;*/
+}
+.menu {
+    width: 230px;
+    background-color: #2f2e33;
+}
+.menu ul{
+    display: flex;
+    flex-direction: column;
+}
+.menulist {
+    padding-top: 200px;
+    padding-bottom: 100%;
+}
+.menulist a {
+    color: white;
+    font-size: x-large;
+}
+.centerTop {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.navbarOption {
+    text-decoration: none;
+    margin-top: 30px;
+}
+#menuHead {
+    font-size: smaller;
+}
+.main {
+    display: flex;
+    flex-direction: row;
+}
+.mainBalance {
+    background-color: #3a5199;
+    padding: 20px;
+    margin: 10px;
+    height: 90px;
+    width: 170px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: white;
+    text-decoration: none;
+}
+.mainBalance {
+}
+.mainBalance p {
+    margin: 0;
+    text-align: center;
+}
+.mainRight {
+    width: 230px;
+}
+.centerTop {
+    padding: 0;
+}
+.mainCenter {
+    width: 1000px;
+}
+.mainRight {
+    background-color: #2f2e33;
+    width: 300px;
+}
+.stockCenter {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.stockContent {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}.stockHeader {
+    margin-top: 30px;
+    margin-left: 30px;
+     display: flex;
+     flex-direction: row;
+     justify-content: space-between;
+}
+#stockSymbol {
+    font-size: x-small;
+}
+.priceStats {
+    margin-top: 20px;
+    margin-left: 30px;
+    margin-right: 30px;
+    width: 100%;
+}
+.priceStats table {
+    /*display: flex;*/
+    /*justify-content: space-between;*/
+}
+.marketCap {
+    width: 100%;
+}
+#marketCapTable tr {
+    background-color: #d5d6d2;
+    display: flex;
+    justify-content: space-between;
+}
+#priceStatsTable {
+    margin-bottom: 0;
+}
+#priceStatsTable tr {
+    background-color: #d5d6d2;
+    display: flex;
+    justify-content: space-between;
+}
+#supplyTable {
+    margin-bottom: 0;
+}
+#supplyTable tr {
+    background-color: #d5d6d2;
+    display: flex;
+    justify-content: space-between;
+}
+#stockSymbol {
+    font-size: small;
+    margin-bottom: 20px;
+    margin-left: 3px;
+}
+#stockPrice {
+    font-size: x-large;
+    margin-bottom: 0;
+}
+#stockName {
+    font-size: xxx-large;
+    margin-bottom: 0;
+}
