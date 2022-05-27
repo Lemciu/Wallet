@@ -17,27 +17,35 @@ public class StockController {
         this.stockService = stockService;
     }
 
-    @GetMapping("/stock")
-    public String stockInfo(@RequestParam String symbol, Model model) {
-        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
-        StockInfoDto stockInfoDto = stockService.getStockInfoDto(stock);
-        model.addAttribute("stock", stockInfoDto);
-        return "stock";
+    @GetMapping("/accountStock")
+    public String accountStock(@RequestParam String symbol, Model model) {
+//        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+//        StockInfoDto stockInfoDto = stockService.getStockInfoDto(stock);
+//        model.addAttribute("stock", stockInfoDto);
+        return "accountStock";
+    }
+
+    @GetMapping("/marketStock")
+    public String marketStock(@RequestParam String symbol, Model model) {
+//        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+//        StockInfoDto stockInfoDto = stockService.getStockInfoDto(stock);
+//        model.addAttribute("stock", stockInfoDto);
+        return "marketStock";
     }
 
     @GetMapping("buy-stock")
     public String buyStock(Model model) {
-        List<Stock> stocks = stockService.findAll();
-        model.addAttribute("stocks", stocks);
-        model.addAttribute("price", 12);
+//        List<Stock> stocks = stockService.findAll();
+//        model.addAttribute("stocks", stocks);
+//        model.addAttribute("price", 12);
         return "transactionForm";
     }
 
     @GetMapping("find")
     public String findStock(@RequestParam(required = false) String findStock,
                             Model model) {
-        List<StockMarketDto> stocks = stockService.findByName(findStock);
-        model.addAttribute("stocks", stocks);
+//        List<StockMarketDto> stocks = stockService.findByName(findStock);
+//        model.addAttribute("stocks", stocks);
         return "market";
     }
 
@@ -45,35 +53,35 @@ public class StockController {
     public String market(@RequestParam(required = false) String sort,
                          @RequestParam(required = false) String findStock,
                          Model model) {
-        stockService.init();
+//        stockService.init();
 //        if (findStock != null) {
 //            List<StockMarketDto> byName = stockService.findByName(findStock);
 //        }
 //        List<StockMarketDto> stocks = stockService.findAllStocksToMarket();
-        List<StockMarketDto> stocks = stockService.findByName(findStock);
-        if (sort == null) {
-
-        } else {
-            stockService.sort(sort, stocks);
-
-        }
-        model.addAttribute("stocks", stocks);
+//        List<StockMarketDto> stocks = stockService.findByName(findStock);
+//        if (sort == null) {
+//
+//        } else {
+//            stockService.sort(sort, stocks);
+//
+//        }
+//        model.addAttribute("stocks", stocks);
         return "market";
     }
 
     @GetMapping("addTofavourite") // scalić to do jednej metody
     public String likeStock(@RequestParam String symbol) {
-        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
-        stock.setFavourite(true);
-        stockService.save(stock);
+//        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+//        stock.setFavourite(true);
+//        stockService.save(stock);
         return "redirect:/market";
     }
 
     @GetMapping("deleteFromfavourite")
     public String unlikeStock(@RequestParam String symbol, @RequestParam(required = false) String sort) {
-        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
-        stock.setFavourite(false);
-        stockService.save(stock);
+//        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+//        stock.setFavourite(false);
+//        stockService.save(stock);
         if (sort == null) {
             System.out.println("sort to null");
             return "redirect:/market";

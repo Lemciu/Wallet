@@ -1,0 +1,467 @@
+.center {
+    background-color: #333333;
+    color: white;
+}
+.firstLineStats {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-right: 40px;
+    margin-left: 40px;
+
+}
+.stockSupplyStats {
+    background-color: #444444;
+}
+.stockMarketStats {
+    margin-right: 50px;
+    /*background-color: #444444;*/
+    /*padding-left: 40px;*/
+    display: flex;
+    flex-direction: column;
+}
+.stockMarketStats table {
+    color: white;
+}
+.stockMarketFirstLine {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.stockMarketMarketcap {
+    width: 45%;
+    margin-left: 40px;
+    /*margin-right: 40px;*/
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #444444;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.stockMarketPrice {
+    width: 45%;
+    margin-left: 40px;
+
+    margin-top: 50px;
+    margin-bottom: 50px;
+    background-color: #444444;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.stockMarketSupply {
+    margin-left: 40px;
+    /*margin-right: 40px;*/
+    margin-top: 20px;
+    margin-bottom: 50px;
+    background-color: #444444;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+}
+.accountStockChange {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#amountStock {
+    display: flex;
+    flex-direction: row;
+
+}
+#accountStockValue {
+    font-size: xx-large;
+    margin-bottom: 0;
+}
+#amountStock p {
+    margin-right: 20px;
+}
+#accountChangeValue {
+    color: limegreen;
+    font-size: x-large;
+}
+.accountStockHistory {
+    background-color: #444444;
+    margin-top: 40px;
+    margin-left: 40px;
+    margin-right: 50px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.exchangeOption {
+    display: flex;
+    flex-direction: row;
+}
+.tradeHeader {
+    margin-left: 40px;
+}
+.exchange p {
+    margin-bottom: 0;
+}
+.exchange h3 {
+    margin-bottom: 40px;
+}
+.tradeCenter h5 {
+    margin-bottom: 0;
+}
+.exchangeOption {
+    margin-top: 20px;
+}
+.exchange button {
+    margin-top: 20px;
+    margin-bottom: 80px;
+}
+#fiatExchange {
+    margin-top: 0;
+    margin-bottom: 30px;
+}
+.exchange {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 40px;
+    margin-right: 50px;
+    padding-left: 340px;
+    padding-right: 340px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    background-color: #444444;
+}
+.tradeCenter p {
+    margin-bottom: 0;
+}
+.tradeTop {
+    margin-bottom: 20px;
+}
+.tradeCenter {
+    display: flex;
+    flex-direction: column;
+    margin-left: 40px;
+    margin-right: 50px;
+    padding-left: 340px;
+    padding-right: 340px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    background-color: #444444;
+}
+
+.tradeCenter button {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+#tradeValue {
+    color: white;
+    margin-top: 20px;
+}
+.accountStockPrice {
+    margin-left: 40px;
+    margin-right: 50px;
+    margin-top: 40px;
+    background-color: #444444;
+    padding-left: 40px;
+    padding-right: 40px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+}
+.accountStockHeader {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-left: 40px;
+    margin-right: 50px;
+    padding-left: 40px;
+    padding-right: 50px;
+    background-color: #444444;
+}
+.firstColumn {
+    width: 75%;
+}
+.stockPriceStats {
+}
+#priceStatsTable {
+    height: 300px;
+    width: 400px;
+    background-color: #444444;
+}
+#priceStatsTable td {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.lastRows {
+    padding-bottom: 40px;
+}
+#lastRow {
+    padding-bottom: 40px;
+}
+#priceStatsTable th{
+    padding-top: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.stockMarketHead {
+    margin-left: 40px;
+    padding-left: 40px;
+    margin-right: 50px;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    background-color: #444444;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.buttons {
+    padding-top: 20px;
+    padding-right: 40px;
+}
+.accountBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.searchBar {
+    margin-top: 30px;
+    margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+}
+.content {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: row;
+}
+#buttonTest {
+    width: 100%;
+}
+.mainAccounts {
+    margin-top: 50px;
+    margin-left: 40px;
+    margin-right: 40px;
+}
+#accountsTable {
+    color: white;
+}
+#accountsTable td {
+    padding-top: 50px;
+
+}
+#priceRow {
+    padding-bottom: 30px;
+
+}
+#marketTable a {
+    display:block;
+    text-decoration:none;
+    color: white;
+}
+.accountHead h2 {
+    margin-left: 40px;
+    color: white;
+}
+#MarketTitle {
+    color: white;
+}
+#accountsTable a {
+    display:block;
+    text-decoration:none;
+    color: white;
+}
+/*#accountsTable tr:hover {*/
+/*    background-color: #444444;*/
+/*}*/
+.table tbody tr:hover {
+    background-color: #444444;
+}
+
+#findInMarket {
+    display: flex;
+    flex-direction: row;
+}
+.whiteText {
+    color: white;
+}
+.changeStock {
+    color: limegreen;
+}
+.changeMinusStock {
+    color: red;
+}
+.menuBar {
+    width: 15%;
+    background-color: #444444
+
+}
+.mainMarket {
+    margin-top: 60px;
+    margin-right: 50px;
+    margin-left: 40px;
+}
+.mainMarket table {
+    color: white;
+
+}
+.rangeMarket {
+    margin-top: 50px;
+    margin-right: 50px;
+    display: flex;
+    flex-direction: row;
+    height: 40px;
+}
+.rangeMarket p {
+    color: white;
+    margin-top: 6px;
+    margin-right: 20px;
+}
+.rangeMarket select {
+    background-color: #444444;
+    color: white;
+}
+.marketHeader {
+    margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.portfolioTableHead {
+    color: white;
+    font-size: larger;
+}
+#searchMarketBar {
+    width: 200px;
+    background-color: #444444;
+    color: white;
+
+}
+#searchMarketBar::placeholder {
+    color: darkgray;
+    opacity: 1;
+}
+
+.menuBar a {
+    width: 100%;
+}
+.center {
+    width: 85%;
+}
+.menuList ul {
+    margin-left: 0;
+}
+.menuList {
+    display: flex;
+    flex-direction: column;
+    font-size: large;
+    margin-top: 70px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.menuList p {
+    margin-left: 20px;
+
+}
+#menuTitle {
+    color: white;
+}
+.menuList a {
+    /*width: 100%;*/
+    margin-top: 20px;
+}
+.topHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    margin-top: 20px;
+    margin-right: 40px;
+    margin-bottom: 70px;
+}
+.topHeader button {
+    /*color: black;*/
+    margin-left: 10px;
+    margin-right: 10px;
+}
+.baton {
+    background-color: #2f2e33;
+    border-width: 0;
+}
+.btn-bd-primary {
+
+}
+.mainCenter {
+    background-color: #444444;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+.headCenter {
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+
+    justify-content: space-between;
+}
+.totalBalance {
+    margin-left: 30px;
+    margin-top: 30px;
+}
+.totalBalance h2 {
+    color: white;
+    margin-bottom: 0;
+}
+.totalBalance p {
+    color: darkgray;
+}
+.headButtons {
+    margin-right: 30px;
+    margin-top: 30px;
+}
+.cryptoInfo {
+    color: white;
+}
+.cryptoPrice {
+    color: darkgray;
+}
+.bottomCenter {
+    color: white;
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 100px;
+    margin-bottom: 50px;
+    padding-left: 40px;
+    padding-right: 30px;
+    background-color: #444444;
+}
+.bottomCenter table {
+
+ font-size: large;
+}
+.changeRangeButtons {
+    margin-right: 30px;
+}
+
+.portfolioStats {
+    padding-bottom: 40px;
+    margin-top: 30px;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#portfolioProfit {
+    color: limegreen;
+    font-size: x-large;
+}
+.headPortfolioFavourite {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 20px;
+}
+.headPortfolioFavourite p {
+    font-size: x-large;
+}
+.headPortfolioFavourite table td {
+
+    justify-content: space-between;
+}
+

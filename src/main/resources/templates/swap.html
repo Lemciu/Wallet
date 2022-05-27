@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Exchange</title>
+    <link rel="stylesheet" th:href="style2.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div class="content">
+    <div th:replace="fragments :: menuBar"></div>
+    <div class="center">
+        <div th:replace="fragments :: topHeader"></div>
+        <div class="exchange">
+        <h3>Exchange</h3>
+            <p>From</p>
+            <div class="exchangeOption">
+                <select class="form-select">
+                    <option>ETH - 0.5123</option>
+                </select>
+                <input type="number">
+            </div>
+            <p>To</p>
+            <div class="exchangeOption">
+
+            <select class="form-select">
+                <option>Bitcoin BTC</option>
+            </select>
+            <input type="number" disabled>
+            </div>
+
+            <p>Rate: 1 ETH = 0.0601 BTC</p>
+            <button class="btn btn-secondary">Exchange</button>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

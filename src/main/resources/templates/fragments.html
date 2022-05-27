@@ -14,6 +14,27 @@
         <a class="navbarOption" th:href="@{/notifications}">Notification</a>
     </ul>
 </div>
+<div class="menuBar" th:fragment="menuBar">
+    <ul class="menuList">
+        <p id="menuTitle">MENU</p>
+        <a class="btn btn-secondary" th:href="@{/}">Portfolio</a>
+        <a class="btn btn-secondary" th:href="@{/market}">Market</a>
+        <a class="btn btn-secondary" th:href="@{/accounts}">Accounts</a>
+        <a class="btn btn-secondary" th:href="@{/buyCrypto}">Buy</a>
+        <a class="btn btn-secondary" th:href="@{/sellCrypto}">Sell</a>
+        <a class="btn btn-secondary" th:href="@{/swap}">Swap</a>
+        <a class="btn btn-secondary" th:href="@{/savings}">Savings</a>
+        <a class="btn btn-secondary" th:href="@{/}">Notification</a>
+        <a class="btn btn-secondary" th:href="@{/}">Settings</a>
+    </ul>
+</div>
+<div class="topHeader"  th:fragment="topHeader">
+    <button type="button" class="btn btn-secondary"><img src="img/whiteok24.png"> Synchronized</button>
+    <button type="button" class="btn btn-secondary"><img src="img/whitebell24.png"></button>
+    <button type="button" class="btn btn-secondary"><img src="img/whiteeye24.png"></button>
+    <button type="button" class="btn btn-secondary"><img src="img/whitehelp24.png"></button>
+    <button type="button" class="btn btn-secondary"><img src="img/whitesettings24.png"></button>
+</div>
 <p>#2f2e33 - Blue Back</p>
 <p>#d5d6d2 - Cool Gray</p>
 <p>#ffffff -  White</p>

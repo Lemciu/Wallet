@@ -18,6 +18,7 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+
     private NotificationService notificationService;
     private StockService stockService;
     private TransactionService transactionService;
@@ -28,29 +29,32 @@ public class HomeController {
         this.transactionService = transactionService;
     }
 
+    @GetMapping("/accounts")
+    public String accounts() {
+        return "accounts";
+    }
+
     @GetMapping("/")
     public String home(Model model) {
-        List<Stock> all = stockService.findAll();
-        all.forEach(System.out::println);
-//        BigDecimal currentValue = transactionService.getCurrentSaldo();
-//        double percentageProfit = transactionService.getPercentageProfitSaldo();
-//        model.addAttribute("currentValue", currentValue);
-//        model.addAttribute("percentageProfit", percentageProfit);
-        List<Notification> notifications = notificationService.findAll();
-        model.addAttribute("notifications", notifications);
-        return "dashboard";
+//        stockService.init();
+        // to ustawić jakoś żeby tylko raz się odpalało
+//        BigDecimal saldo = transactionService.getCurrentSaldo();
+//        BigDecimal profit = transactionService.getProfitSaldo();
+//        model.addAttribute("saldo", saldo);
+//        model.addAttribute("profit", profit);
+        return "portfolio";
     }
 
     @GetMapping("/investments")
     public String investments(Model model) {
-        BigDecimal currentValue = transactionService.getCurrentSaldo();
-        double percentageProfit = transactionService.getPercentageProfitSaldo();
-        BigDecimal profit = transactionService.getProfitSaldo();
-        List<TransactionOwnedDto> stocks = transactionService.getAllOwnedTransactions();
-        model.addAttribute("stocks", stocks);
-        model.addAttribute("currentValue", currentValue);
-        model.addAttribute("percentageProfit", percentageProfit);
-        model.addAttribute("profit", profit);
+//        BigDecimal currentValue = transactionService.getCurrentSaldo();
+//        double percentageProfit = transactionService.getPercentageProfitSaldo();
+//        BigDecimal profit = transactionService.getProfitSaldo();
+//        List<TransactionOwnedDto> stocks = transactionService.getAllOwnedTransactions();
+//        model.addAttribute("stocks", stocks);
+//        model.addAttribute("currentValue", currentValue);
+//        model.addAttribute("percentageProfit", percentageProfit);
+//        model.addAttribute("profit", profit);
         return "investments";
     }
 
@@ -61,39 +65,54 @@ public class HomeController {
 
     @GetMapping("/add-notification")
     public String addNotification(Model model) {
-        Notification newNotification = new Notification("", "", null, false);
-        model.addAttribute("notification", newNotification);
+//        Notification newNotification = new Notification("", "", null, false);
+//        model.addAttribute("notification", newNotification);
         return "notification";
     }
 
     @GetMapping("/edit-notification")
     public String editNotification(@RequestParam Long id, Model model) {
-        Notification notification = notificationService.findById(id).orElseThrow();
-        model.addAttribute("notification", notification);
+//        Notification notification = notificationService.findById(id).orElseThrow();
+//        model.addAttribute("notification", notification);
         return "notification";
     }
 
     @PostMapping("/save-notification")
     public String saveNotification(Notification notification) {
-        notificationService.save(notification);
+//        notificationService.save(notification);
         return "redirect:/notifications";
     }
 
     @GetMapping("/notifications")
     public String notifications(@RequestParam(required = false) boolean finished, Model model) {
-        List<Notification> notifications = notificationService.findAllByFinished(finished);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
-        model.addAttribute("formatter", formatter);
-        model.addAttribute("notifications", notifications);
+//        List<Notification> notifications = notificationService.findAllByFinished(finished);
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd");
+//        model.addAttribute("formatter", formatter);
+//        model.addAttribute("notifications", notifications);
 
         return "notifications";
     }
 
+    @GetMapping("/swap")
+    public String swapCrypto() {
+        return "swap";
+    }
+
+    @GetMapping("/buyCrypto")
+    public String buyCrypto() {
+        return "formCrypto";
+    }
+
+    @GetMapping("/sellCrypto")
+    public String sellCrypto() {
+        return "formCrypto";
+    }
+
     @PostMapping("/completed")
     public String completed(@RequestParam Long id) {
-        Notification notification = notificationService.findById(id).orElseThrow();
-        notificationService.setFinishedNotification(notification);
-        notificationService.save(notification);
+//        Notification notification = notificationService.findById(id).orElseThrow();
+//        notificationService.setFinishedNotification(notification);
+//        notificationService.save(notification);
         return "redirect:/notifications";
     }
 

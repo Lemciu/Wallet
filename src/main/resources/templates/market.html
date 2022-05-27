@@ -3,51 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <title>Market</title>
-    <link rel="stylesheet" th:href="style.css">
+    <link rel="stylesheet" th:href="style2.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 </head>
 <body>
-<div class="center">
-    <div th:replace="fragments :: menu"></div>
-    <div class="content">
-        <div class="mainMarket">
-            <div class="marketHead">
-                <h3>MARKET</h3>
-                <div>
-                    <form method="get" th:action="market">
-                        <input type="text" th:placeholder="Find" name="findStock">
-                        <input type="submit" th:value="Search">
-                    </form>
+<div class="content">
+<!--    zrobić, że się wpłaca gotówe i później to można buy/sell-->
+    <div th:replace="fragments :: menuBar"></div>
+    <div class="center">
+        <div th:replace="fragments :: topHeader"></div>
+        <div class="marketHeader">
+            <div>
+                <h2 id="MarketTitle">MARKET</h2>
+                <div id="findInMarket">
+                    <input type="search" class="form-control" id="searchMarketBar" th:placeholder="Search"/>
+                    <button class="btn btn-secondary" type="submit"><img src="/img/whitemagnifier30.png"></button>
                 </div>
             </div>
-            <table class="table">
+            <div class="rangeMarket">
+                <p>Range</p>
+                <select class="form-select">
+                    <option>1h</option>
+                    <option>24h</option>
+                    <option>7D</option>
+                    <option>1M</option>
+                    <option>3M</option>
+                </select>
+            </div>
+        </div>
+        <div class="mainMarket">
+            <table class="table" id="marketTable">
                 <thead>
-                <tr>
-                    <th>#<a th:href="@{'/market?sort=marketcap'}"><img src="/img/arrowUp.png"></a><a th:href="@{'/market?sort=marketcap-desc'}"><img src="/img/arrowDown.png"></a></th>
-                    <th>Crypto<a th:href="@{'/market?sort=crypto'}"><img src="/img/arrowUp.png"></a><a th:href="@{'/market?sort=crypto-desc'}"><img src="/img/arrowDown.png"></a></th>
-                    <th>Price<a th:href="@{'/market?sort=price'}"><img src="/img/arrowUp.png"></a><a th:href="@{'/market?sort=price-desc'}"><img src="/img/arrowDown.png"></a></th>
-                    <th>1h<a th:href="@{'/market?sort=1h'}"><img src="/img/arrowUp.png"></a><a th:href="@{'/market?sort=1h-desc'}"><img src="/img/arrowDown.png"></a></th>
-                    <th>24h<a th:href="@{'/market?sort=24h'}"><img src="/img/arrowUp.png"></a><a th:href="@{'/market?sort=24h-desc'}"><img src="/img/arrowDown.png"></a></th>
-                    <th>7 Days<a th:href="@{'/market?sort=7d'}"><img src="/img/arrowUp.png"></a><a th:href="@{'/market?sort=7d-desc'}"><img src="/img/arrowDown.png"></a></th>
-                    <th>Market cap<a th:href="@{'/market?sort=marketcap'}"><img src="/img/arrowUp.png"></a><a th:href="@{'/market?sort=marketcap-desc'}"><img src="/img/arrowDown.png"></a></th>
-                    <th><img src="/img/starEmpty.png"></th>
-                </tr>
-                <tr th:each="stock: ${stocks}" th:object="${stock}">
-<!--                    <a th:href="@{'stock?name=' + *{name}}"></a>-->
-                    <td th:text="*{id}"></td>
-<!--                    <td th:text="*{name}"></td>-->
-                    <td><a th:href="@{'stock?symbol=' + *{symbol}}" th:text="*{name}"></a></td>
-                    <td th:text="|*{#numbers.formatDecimal(currentPrice, 1, 'COMMA', 2, 'POINT')}$|"></td>
-                    <td th:text="|*{#numbers.formatDecimal(percentChange1H, 1, 'COMMA', 2, 'POINT')}%|"></td>
-                    <td th:text="|*{#numbers.formatDecimal(percentChange24H, 1, 'COMMA', 2, 'POINT')}%|"></td>
-                    <td th:text="|*{#numbers.formatDecimal(percentChange7D, 1, 'COMMA', 2, 'POINT')}%|"></td>
-                    <td th:text="|*{#numbers.formatDecimal(marketCap, 0, 'COMMA', 0, 'POINT')}$|"></td>
-                    <td th:if="*{favourite}"><a th:href="@{'deleteFromfavourite?symbol=' + *{symbol}}"><img src="/img/starFull.png"></a></td>
-                    <td th:unless="*{favourite}"><a th:href="@{'addTofavourite?symbol=' + *{symbol}}"><img src="/img/starEmpty.png"></a></td>
-
-                </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Crypto</th>
+                        <th>Price</th>
+                        <th>Change</th>
+                        <th>Market cap</th>
+                        <th><img src="/img/whitestar24.png"></th>
+                    </tr>
                 </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td><a th:href="@{/marketStock?symbol=BTC}">Bitcoin</a></td>
+                        <td><a th:href="@{/marketStock?symbol=BTC}">$29,123.67</a></td>
+                        <td class="changeStock"><img src="/img/upgreen24.png"> 2.8%</td>
+                        <td>$567.778B</td>
+                        <td><img src="/img/whitestar24.png"></td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Ethereum</td>
+                        <td>$1,923.17</td>
+                        <td class="changeStock"><img src="/img/upgreen24.png"> 3.7%</td>
+                        <td>$317.438B</td>
+                        <td><img src="/img/starfilled24.png"></td>
+                    </tr>
+                </tbody>
+
             </table>
         </div>
     </div>
