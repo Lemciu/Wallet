@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.ml.wallet.stock.dto.StockInfoDto;
 import pl.ml.wallet.stock.dto.StockMarketDto;
 
 import java.util.List;
@@ -26,10 +25,12 @@ public class StockController {
     }
 
     @GetMapping("/marketStock")
-    public String marketStock(@RequestParam String symbol, Model model) {
-//        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
-//        StockInfoDto stockInfoDto = stockService.getStockInfoDto(stock);
-//        model.addAttribute("stock", stockInfoDto);
+    public String marketStock(@RequestParam String symbol,
+                              @RequestParam (required = false) String range,
+                              Model model) {
+        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+        StockMarketDto stockMarketDto = stockService.toMarketDto(stock, range);
+        model.addAttribute("stock", stockMarketDto);
         return "marketStock";
     }
 
@@ -51,45 +52,14 @@ public class StockController {
 
     @GetMapping("/market")
     public String market(@RequestParam(required = false) String sort,
+                         @RequestParam(required = false) String range,
                          @RequestParam(required = false) String findStock,
                          Model model) {
-//        stockService.init();
-//        if (findStock != null) {
-//            List<StockMarketDto> byName = stockService.findByName(findStock);
-//        }
-//        List<StockMarketDto> stocks = stockService.findAllStocksToMarket();
-//        List<StockMarketDto> stocks = stockService.findByName(findStock);
-//        if (sort == null) {
-//
-//        } else {
-//            stockService.sort(sort, stocks);
-//
-//        }
-//        model.addAttribute("stocks", stocks);
+        //#rank/id , price, change, marketcap i favourite
+
+        List<StockMarketDto> stocks = stockService.findAll(range);
+        model.addAttribute("stocks", stocks);
         return "market";
-    }
-
-    @GetMapping("addTofavourite") // scalić to do jednej metody
-    public String likeStock(@RequestParam String symbol) {
-//        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
-//        stock.setFavourite(true);
-//        stockService.save(stock);
-        return "redirect:/market";
-    }
-
-    @GetMapping("deleteFromfavourite")
-    public String unlikeStock(@RequestParam String symbol, @RequestParam(required = false) String sort) {
-//        Stock stock = stockService.findBySymbol(symbol).orElseThrow();
-//        stock.setFavourite(false);
-//        stockService.save(stock);
-        if (sort == null) {
-            System.out.println("sort to null");
-            return "redirect:/market";
-        } else {
-            System.out.println("sort to nie null");
-
-            return "redirect:/market?sort=" + sort;
-        }
     }
 
 }

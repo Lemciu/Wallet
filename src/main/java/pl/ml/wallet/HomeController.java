@@ -7,14 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.ml.wallet.notification.Notification;
 import pl.ml.wallet.notification.NotificationService;
-import pl.ml.wallet.stock.Stock;
 import pl.ml.wallet.stock.StockService;
 import pl.ml.wallet.transaction.TransactionService;
-import pl.ml.wallet.transaction.dto.TransactionOwnedDto;
-
-import java.math.BigDecimal;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Controller
 public class HomeController {

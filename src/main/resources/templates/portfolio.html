@@ -24,7 +24,6 @@
                     <button type="button" class="btn btn-secondary">Sell</button>
                 </div>
             </div>
-<!--            buy/sell będzie działać pomiedzy krypto a savings-->
             <div class="portfolioStats">
                 <div class="portfolioProfit">
                     <p th:if="${percentageProfit >= 0}"><img src="/img/upgreen24.png"></p>
@@ -46,7 +45,7 @@
         <div class="bottomCenter">
             <div class="headPortfolioFavourite">
                 <p>FAVOURITE</p>
-                <button type="button" class="btn btn-secondary" th:href="@{/market}">See all</button>
+                <a th:href="@{/market}"><button type="button" class="btn btn-secondary">See all</button></a>
             </div>
             <table class="table">
                 <thead>

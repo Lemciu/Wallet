@@ -9,7 +9,6 @@
 </head>
 <body>
 <div class="content">
-<!--    zrobić, że się wpłaca gotówe i później to można buy/sell-->
     <div th:replace="fragments :: menuBar"></div>
     <div class="center">
         <div th:replace="fragments :: topHeader"></div>
@@ -35,32 +34,29 @@
         <div class="mainMarket">
             <table class="table" id="marketTable">
                 <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Crypto</th>
-                        <th>Price</th>
-                        <th>Change</th>
-                        <th>Market cap</th>
-                        <th><img src="/img/whitestar24.png"></th>
-                    </tr>
+                <tr>
+                    <th>#</th>
+                    <th>Crypto</th>
+                    <th>Price</th>
+                    <th>Change</th>
+                    <th>Market cap</th>
+                    <th><img src="/img/whitestar24.png"></th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td><a th:href="@{/marketStock?symbol=BTC}">Bitcoin</a></td>
-                        <td><a th:href="@{/marketStock?symbol=BTC}">$29,123.67</a></td>
-                        <td class="changeStock"><img src="/img/upgreen24.png"> 2.8%</td>
-                        <td>$567.778B</td>
-                        <td><img src="/img/whitestar24.png"></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Ethereum</td>
-                        <td>$1,923.17</td>
-                        <td class="changeStock"><img src="/img/upgreen24.png"> 3.7%</td>
-                        <td>$317.438B</td>
-                        <td><img src="/img/starfilled24.png"></td>
-                    </tr>
+                <tr th:each="stock: ${stocks}" th:object="${stock}">
+                    <td th:text="*{id}"></td>
+                    <td><a th:href="@{/marketStock(symbol=*{symbol})}" th:text="*{name}"></a></td>
+                    <td><a th:href="@{/marketStock?symbol=BTC}"
+                           th:text="|$*{#numbers.formatDecimal(currentPrice, 1, 'COMMA', 2, 'POINT')}|"></a></td>
+                    <td class="changeStock">
+                        <p><img src="/img/upgreen24.png"></p>
+                        <p th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                    </td>
+                    <td th:text="|$*{#numbers.formatDecimal(marketCap, 1, 'COMMA', 0, 'POINT')}|"></td>
+                    <td th:if="*{favourite}"><img src="/img/starfilled24.png"></td>
+                    <td th:unless="*{favourite}"><img src="/img/whitestar24.png"></td>
+                </tr>
                 </tbody>
 
             </table>

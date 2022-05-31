@@ -5,13 +5,11 @@ import org.springframework.web.client.RestTemplate;
 import pl.ml.wallet.stock.api.StockDto;
 import pl.ml.wallet.stock.api.StockResponseDto;
 import pl.ml.wallet.stock.comparator.*;
-import pl.ml.wallet.stock.dto.StockInfoDto;
 import pl.ml.wallet.stock.dto.StockMarketDto;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,8 +22,43 @@ public class StockService {
         this.stockRepository = stockRepository;
     }
 
-    public List<Stock> findAll() {
-        return stockRepository.findAll();
+    public List<StockMarketDto> findAll(String range) {
+        List<Stock> all = stockRepository.findAll();
+
+//        List<StockMarketDto> test = stockRepository.findAllStockMarketDtoWith1hChange();
+
+//        if (test == null) {
+//            System.out.println("to null");
+//        } else {
+//            System.out.println("jednak nie");
+//            System.out.println(test.size());
+//        }
+
+
+        if (range == null) {
+            range = "1D";
+        }
+        switch (range) {
+            case "1h":
+                break;
+            case "1D":
+            case "1W":
+            case "1M":
+            case "2M":
+            case "3M":
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + range);
+        }
+
+        List<StockMarketDto> collect = all.stream().map(s -> {
+
+
+            return new StockMarketDto(s.getId(), s.getName(),
+                    s.getSymbol(), s.getCurrentPrice(), s.getMarketCap(),
+                    s.getPercentChange24H(), s.isFavourite());
+        }).collect(Collectors.toList());
+        return null;
     }
 
     public List<StockDto> getAllStocks() {
@@ -35,46 +68,57 @@ public class StockService {
         return forObject.getData();
     }
 
-    public List<StockMarketDto> findByName(String name) {
-        if (name == null) {
-            return findAllStocksToMarket();
-        } else {
-            return stockRepository.findByNameContainingIgnoreCase(name)
-                    .stream()
-                    .map(this::toMarketDto)
-                    .collect(Collectors.toList());
-        }
-    }
+//    public List<StockMarketDto> findByName(String name) {
+//        if (name == null) {
+////            return findAllStocksToMarket();
+//            return null;
+//        } else {
+//            return stockRepository.findByNameContainingIgnoreCase(name)
+//                    .stream()
+//                    .map(this::toMarketDto)
+//                    .collect(Collectors.toList());
+//        }
+//    }
 
-    private StockMarketDto toMarketDto(Stock stock) {
+    public StockMarketDto toMarketDto(Stock stock, String range) {
         StockMarketDto dto = new StockMarketDto();
+        if (range == null) {
+           range = "1D";
+        }
+        switch (range) {
+            case "1h":
+                dto.setPercentChange(stock.getPercentChange1H());
+                break;
+            case "1D":
+                dto.setPercentChange(stock.getPercentChange24H());
+                break;
+            case "1W":
+                dto.setPercentChange(stock.getPercentChange7D());
+                break;
+            case "1M":
+                dto.setPercentChange(stock.getPercentChange30D());
+                break;
+            case "2M":
+                dto.setPercentChange(stock.getPercentChange60D());
+                break;
+            case "3M":
+                dto.setPercentChange(stock.getPercentChange90D());
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + range);
+        }
         dto.setId(stock.getId());
         dto.setName(stock.getName());
         dto.setSymbol(stock.getSymbol());
         dto.setCurrentPrice(stock.getCurrentPrice());
         dto.setMarketCap(stock.getMarketCap());
-        dto.setPercentChange1H(stock.getPercentChange1H());
-        dto.setPercentChange24H(stock.getPercentChange24H());
-        dto.setPercentChange7D(stock.getPercentChange7D());
-        dto.setFavourite(stock.isFavourite());
-        return dto;
-    }
-
-    private StockInfoDto toInfoDto(Stock stock) {
-        StockInfoDto dto = new StockInfoDto();
-
-        dto.setName(stock.getName());
-        dto.setSymbol(stock.getSymbol());
         dto.setMarketCapDominance(stock.getMarketCapDominance());
         dto.setFullyDilutedMarketCap(stock.getFullyDilutedMarketCap());
         dto.setVolume24H(stock.getVolume24H());
         dto.setVolumeChange24H(stock.getVolumeChange24H());
-        dto.setMaxSupply(stock.getMaxSupply());
-        dto.setTotalSupply(stock.getTotalSupply());
         dto.setCirculatingSupply(stock.getCirculatingSupply());
-        dto.setCurrentPrice(stock.getCurrentPrice());
-        dto.setMarketCap(stock.getMarketCap());
-        dto.setPercentChange24H(stock.getPercentChange24H());
+        dto.setTotalSupply(stock.getTotalSupply());
+        dto.setMaxSupply(stock.getMaxSupply());
         dto.setFavourite(stock.isFavourite());
         return dto;
     }
@@ -170,23 +214,16 @@ public class StockService {
         });
     }
 
-    public StockInfoDto getStockInfoDto(Stock stock) {
-        return new StockInfoDto(stock.getId(), stock.getName(), stock.getSymbol(), stock.getCurrentPrice(), stock.getMarketCap(),
-                stock.getMarketCapDominance(), stock.getFullyDilutedMarketCap(), stock.getPercentChange24H(), stock.getVolume24H(),
-                stock.getVolumeChange24H(), stock.isFavourite(), stock.getMaxSupply(), stock.getTotalSupply(),
-                stock.getCirculatingSupply());
-    }
-
-    public List<StockMarketDto> findAllStocksToMarket() {
-        List<Stock> all = stockRepository.findAll();
-        AtomicInteger id = new AtomicInteger(1);
-
-        return all.stream().map(s ->
-                new StockMarketDto(id.getAndIncrement(), s.getName(), s.getSymbol(),
-                        s.getCurrentPrice(), s.getMarketCap(), s.getPercentChange1H(),
-                        s.getPercentChange24H(), s.getPercentChange7D(), s.isFavourite())
-        ).collect(Collectors.toList());
-    }
+//    public List<StockMarketDto> findAllStocksToMarket() {
+//        List<Stock> all = stockRepository.findAll();
+//        AtomicInteger id = new AtomicInteger(1);
+//
+//        return all.stream().map(s ->
+//                new StockMarketDto(id.getAndIncrement(), s.getName(), s.getSymbol(),
+//                        s.getCurrentPrice(), s.getMarketCap(), s.getPercentChange1H(),
+//                        s.getPercentChange24H(), s.getPercentChange7D(), s.isFavourite())
+//        ).collect(Collectors.toList());
+//    }
 
     public void save(Stock stock) {
         stockRepository.save(stock);
