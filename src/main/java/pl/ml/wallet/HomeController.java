@@ -18,7 +18,6 @@ import java.util.List;
 
 @Controller
 public class HomeController {
-
     private NotificationService notificationService;
     private StockService stockService;
     private TransactionService transactionService;
@@ -35,13 +34,11 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
-//        stockService.init();
-        // to ustawić jakoś żeby tylko raz się odpalało
-//        BigDecimal saldo = transactionService.getCurrentSaldo();
-//        BigDecimal profit = transactionService.getProfitSaldo();
-//        model.addAttribute("saldo", saldo);
-//        model.addAttribute("profit", profit);
+    public String home(@RequestParam (required = false) String range,
+            Model model) {
+        model.addAttribute("balance", transactionService.getTotalBalance());
+        model.addAttribute("percentageProfit", transactionService.getPercentageProfit(range));
+        model.addAttribute("profit", transactionService.getProfit(range));
         return "portfolio";
     }
 

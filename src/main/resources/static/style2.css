@@ -82,7 +82,7 @@
     margin-right: 20px;
 }
 #accountChangeValue {
-    color: limegreen;
+    color: #24e484;
     font-size: x-large;
 }
 .accountStockHistory {
@@ -105,6 +105,15 @@
 }
 .exchange h3 {
     margin-bottom: 40px;
+}
+.portfolioProfit {
+    width: 300px;
+    display: flex;
+    flex-direction: row;
+}
+.portfolioProfit img {
+    margin-top: 7px;
+    height: 24px;
 }
 .tradeCenter h5 {
     margin-bottom: 0;
@@ -284,10 +293,10 @@
     color: white;
 }
 .changeStock {
-    color: limegreen;
+    color: #24e484;
 }
 .changeMinusStock {
-    color: red;
+    color: #ff344c;
 }
 .menuBar {
     width: 15%;
@@ -447,8 +456,12 @@
     flex-direction: row;
     justify-content: space-between;
 }
-#portfolioProfit {
-    color: limegreen;
+#portfolioPlusProfit {
+    color: #24e484;
+    font-size: x-large;
+}
+#portfolioMinusProfit {
+    color: #ff344c;
     font-size: x-large;
 }
 .headPortfolioFavourite {
