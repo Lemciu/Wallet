@@ -219,6 +219,10 @@
 .stockMarketHeadPrice p {
     margin-bottom: 0;
 }
+.justRow {
+    display: flex;
+    flex-direction: row;
+}
 .stockNameHeader {
     display: flex;
     flex-direction: row;
@@ -477,6 +481,7 @@
     margin-bottom: 50px;
     padding-left: 40px;
     padding-right: 30px;
+    padding-bottom: 40px;
     background-color: #444444;
 }
 .bottomCenter table {
@@ -497,6 +502,12 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.greenFont {
+    color: #24e484;
+}
+.redFont {
+    color: #ff344c;
 }
 #portfolioPlusProfit {
     color: #24e484;

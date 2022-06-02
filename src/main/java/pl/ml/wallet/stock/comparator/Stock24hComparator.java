@@ -1,12 +1,12 @@
 package pl.ml.wallet.stock.comparator;
 
-import pl.ml.wallet.stock.dto.StockMarketDto;
+import pl.ml.wallet.stock.dto.StockMarketProfileDto;
 
 import java.util.Comparator;
 
-public class Stock24hComparator implements Comparator<StockMarketDto> {
+public class Stock24hComparator implements Comparator<StockMarketProfileDto> {
     @Override
-    public int compare(StockMarketDto o1, StockMarketDto o2) {
+    public int compare(StockMarketProfileDto o1, StockMarketProfileDto o2) {
         return o1.getPercentChange24H().compareTo(o2.getPercentChange24H());
     }
 }

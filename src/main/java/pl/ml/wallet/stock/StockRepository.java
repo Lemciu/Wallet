@@ -13,20 +13,30 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
 
     Optional<Stock> findBySymbol(String symbol);
 
+    @Query("SELECT name AS name, currentPrice AS currentPrice, percentChange24H AS percentChange FROM Stock " +
+            "WHERE favourite = true")
+    List<StockMarketDto> findAllByFavouriteIsTrue();
+
     List<Stock> findByNameContainingIgnoreCase(String name);
 
-//zamiast zwykłego List<Stock> zrobić odrazu za pomocą zapytania odpowiedni obiekt?
+    @Query("SELECT id AS id, name AS name, symbol AS symbol, currentPrice AS currentPrice, marketCap AS marketCap, percentChange1H AS percentChange, favourite AS favourite " +
+            "FROM Stock")
+    List<StockMarketDto> findAllStockMarketDtoWith1hChange();
 
-//            this.id = id;
-//        this.name = name;
-//        this.symbol = symbol;
-//        this.currentPrice = currentPrice;
-//        this.marketCap = marketCap;
-//        this.percentChange = percentChange;
-//        this.favourite = favourite;
+    @Query("SELECT id AS id, name AS name, symbol AS symbol, currentPrice AS currentPrice, marketCap AS marketCap, percentChange24H AS percentChange, favourite AS favourite " +
+            "FROM Stock")
+    List<StockMarketDto> findAllStockMarketDtoWith24hChange();
 
-//    @Query("SELECT id AS id, name AS name, symbol AS symbol, currentPrice AS currentPrice, marketCap AS marketCap, percentChange1H AS percentChange, favourite AS favourite " +
-//            "FROM Stock")
-//    List<StockMarketDto> findAllStockMarketDtoWith1hChange();
+    @Query("SELECT id AS id, name AS name, symbol AS symbol, currentPrice AS currentPrice, marketCap AS marketCap, percentChange7D AS percentChange, favourite AS favourite " +
+            "FROM Stock")
+    List<StockMarketDto> findAllStockMarketDtoWith7dChange();
+
+    @Query("SELECT id AS id, name AS name, symbol AS symbol, currentPrice AS currentPrice, marketCap AS marketCap, percentChange30D AS percentChange, favourite AS favourite " +
+            "FROM Stock")
+    List<StockMarketDto> findAllStockMarketDtoWith30dChange();
+
+    @Query("SELECT id AS id, name AS name, symbol AS symbol, currentPrice AS currentPrice, marketCap AS marketCap, percentChange90D AS percentChange, favourite AS favourite " +
+            "FROM Stock")
+    List<StockMarketDto> findAllStockMarketDtoWith90dChange();
 
 }

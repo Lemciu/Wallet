@@ -22,7 +22,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "FROM Transaction t LEFT JOIN Stock s ON t.stock.id = s.id")
     List<TransactionBalanceDto> findAllToGetTotalBalance();
 
-    //    to fix
     @Query("SELECT t.amount AS amount, s.currentPrice AS currentPrice, t.buyPrice AS buyPrice " +
             "FROM Transaction t LEFT JOIN Stock s ON t.stock.id = s.id")
     List<TransactionProfitDto> findAllToGetWholeProfit();
@@ -43,10 +42,11 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
             "FROM Transaction t LEFT JOIN Stock s ON t.stock.id = s.id")
     List<TransactionProfitDto> findAllToGet30dProfit();
 
-//    List<TransactionProfitDto> findAllToGet60DProfit();
-
     @Query("SELECT s.id AS id, t.amount AS amount, s.percentChange90D AS percentChange, s.currentPrice AS currentPrice " +
             "FROM Transaction t LEFT JOIN Stock s ON t.stock.id = s.id")
     List<TransactionProfitDto> findAllToGet90dProfit();
+
+    @Query("SELECT s.name AS name, s.symbol AS symbol, t.amount AS amount, s.currentPrice AS currentPrice, s.percentChange1H AS percentChange FROM Stock s JOIN Transaction t ON s.id = t.stock.id")
+    List<TransactionOwnedDto> findAllMyAccountsWith1hChange();
 
 }

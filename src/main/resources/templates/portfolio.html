@@ -12,7 +12,6 @@
     <div  th:replace="fragments :: menuBar"></div>
     <div class="center">
         <div th:replace="fragments :: topHeader"></div>
-
         <div class="mainCenter">
             <div class="headCenter">
                 <div class="totalBalance">
@@ -20,8 +19,8 @@
                     <p>total balance</p>
                 </div>
                 <div class="headButtons">
-                    <button type="button" class="btn btn-secondary">Buy</button>
-                    <button type="button" class="btn btn-secondary">Sell</button>
+                    <a th:href="@{/buyCrypto}"><button type="button" class="btn btn-secondary">Buy</button></a>
+                    <a th:href="@{/sellCrypto}"><button type="button" class="btn btn-secondary">Sell</button></a>
                 </div>
             </div>
             <div class="portfolioStats">
@@ -54,25 +53,21 @@
                         <th>Change</th>
                         <th>Price</th>
                     </tr>
-                    <tr>
-                        <td class="cryptoInfo">Bitcoin</td>
-                        <td class="changeStock"><img src="/img/upgreen24.png"> +1.77%</td>
-                        <td class="cryptoInfo">$29,792</td>
-                    </tr>
-                    <tr>
-                        <td class="cryptoInfo">Ethereum</td>
-                        <td class="changeStock"><img src="/img/upgreen24.png"> +4.77%</td>
-                        <td class="cryptoInfo">$2,212</td>
-                    </tr>
-                    <tr>
-                        <td class="cryptoInfo">Dogecoin</td>
-                        <td class="changeMinusStock"><img src="/img/downred24.png"> -14.67%</td>
-                        <td class="cryptoInfo">$0,06</td>
-                    </tr>
-                    <tr>
-                        <td class="cryptoInfo">Cardano</td>
-                        <td class="changeMinusStock"><img src="/img/downred24.png"> -7.12%</td>
-                        <td class="cryptoInfo">$0,56</td>
+                    <tr th:each="stock: ${favouriteStocks}" th:object="${stock}">
+                        <td class="cryptoInfo" th:text="*{name}">Bitcoin</td>
+                        <div th:if="*{percentChange >=0}">
+                            <td class="changeStock">
+                                <p><img src="/img/upgreen24.png"></p>
+                                <p class="greenFont" th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                            </td>
+                        </div>
+                        <div th:unless="*{percentChange >=0}">
+                            <td class="changeStock">
+                                <p><img src="/img/downred24.png"></p>
+                                <p class="redFont" th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                            </td>
+                        </div>
+                        <td class="cryptoInfo" th:text="|$*{#numbers.formatDecimal(currentPrice, 1, 'COMMA', 2, 'POINT')}|"></td>
                     </tr>
                 </thead>
             </table>

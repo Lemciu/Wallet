@@ -6,6 +6,7 @@ import pl.ml.wallet.stock.api.StockDto;
 import pl.ml.wallet.stock.api.StockResponseDto;
 import pl.ml.wallet.stock.comparator.*;
 import pl.ml.wallet.stock.dto.StockMarketDto;
+import pl.ml.wallet.stock.dto.StockMarketProfileDto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -23,42 +24,23 @@ public class StockService {
     }
 
     public List<StockMarketDto> findAll(String range) {
-        List<Stock> all = stockRepository.findAll();
-
-//        List<StockMarketDto> test = stockRepository.findAllStockMarketDtoWith1hChange();
-
-//        if (test == null) {
-//            System.out.println("to null");
-//        } else {
-//            System.out.println("jednak nie");
-//            System.out.println(test.size());
-//        }
-
-
         if (range == null) {
             range = "1D";
         }
         switch (range) {
             case "1h":
-                break;
+                return stockRepository.findAllStockMarketDtoWith1hChange();
             case "1D":
+                return stockRepository.findAllStockMarketDtoWith24hChange();
             case "1W":
+                return stockRepository.findAllStockMarketDtoWith7dChange();
             case "1M":
-            case "2M":
+                return stockRepository.findAllStockMarketDtoWith30dChange();
             case "3M":
-                break;
+                return stockRepository.findAllStockMarketDtoWith90dChange();
             default:
                 throw new IllegalStateException("Unexpected value: " + range);
         }
-
-        List<StockMarketDto> collect = all.stream().map(s -> {
-
-
-            return new StockMarketDto(s.getId(), s.getName(),
-                    s.getSymbol(), s.getCurrentPrice(), s.getMarketCap(),
-                    s.getPercentChange24H(), s.isFavourite());
-        }).collect(Collectors.toList());
-        return null;
     }
 
     public List<StockDto> getAllStocks() {
@@ -80,10 +62,10 @@ public class StockService {
 //        }
 //    }
 
-    public StockMarketDto toMarketDto(Stock stock, String range) {
-        StockMarketDto dto = new StockMarketDto();
+    public StockMarketProfileDto toMarketDto(Stock stock, String range) {
+        StockMarketProfileDto dto = new StockMarketProfileDto();
         if (range == null) {
-           range = "1D";
+            range = "1D";
         }
         switch (range) {
             case "1h":
@@ -123,7 +105,7 @@ public class StockService {
         return dto;
     }
 
-    public void sort(String sort, List<StockMarketDto> stocks) {
+    public void sort(String sort, List<StockMarketProfileDto> stocks) {
         switch (sort) {
             case "crypto":
                 stocks.sort(new StockNameComparator());
@@ -235,6 +217,10 @@ public class StockService {
 
     public Optional<Stock> findBySymbol(String symbol) {
         return stockRepository.findBySymbol(symbol);
+    }
+
+    public List<StockMarketDto> findFavouriteStocks() {
+        return stockRepository.findAllByFavouriteIsTrue();
     }
 
 }

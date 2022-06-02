@@ -17,7 +17,8 @@
                 <div>
                     <div class="stockNameHeader">
                         <h2 th:text="${stock.name}"></h2>
-                        <p><img src="/img/whitestar24.png"></p>
+                        <p th:if="${stock.favourite}"><a th:href="@{/deleteFromFavourite(symbol=${stock.symbol})}"><img src="/img/starfilled24.png"></a></p>
+                        <p th:unless="${stock.favourite}"><a th:href="@{/addToFavourite(symbol=${stock.symbol})}"><img src="/img/whitestar24.png"></a></p>
                     </div>
                     <p th:text="${stock.symbol}" id="stockSymbol"></p>
                 </div>

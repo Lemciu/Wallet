@@ -15,22 +15,9 @@ public class Transaction {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
     @ManyToOne
-    private Stock stock; // kupiliśmy BTC
-    private BigDecimal amount; // 1 sztukę
-    private BigDecimal buyPrice; // po 35k sztuka // 2k sztuka
-    // te poniżej na razie wyłącze, niech wszystko na usd(t) się opiera i później ewentualnie przelicza
-//    private BigDecimal buyCurrencyPrice; // chyba też to potrzebne będzie
-//    @ManyToOne
-//    private Stock buyCurrency; // zapłaciliśmy w $ // w ETH
-    // postarać się dorzucić wykres?
-    // jest co robić i w sumie to juz jest całkiem konkretne
-    //dobra na razie osobno! tylko krypto płatności, później dodamy możliwość przelewania tej 'kasy' do innego 'portfela podgrupy'
-    //albo tutaj po prostu dodać do jakiej categori to idzie/ w konstruktorze nie musi być wszystko wypełnione
-    //na razie tak/ tylko jak połączyć to z wydatkami ?
-    //i z jednego będziemy mogli przelać do dreugiego np z oszczednosci x tetheru na zlotówki i do oszczedności czy tam odwrotnie
-//    private Category category; Account ?//wydatki,
-
-
+    private Stock stock;
+    private BigDecimal amount;
+    private BigDecimal buyPrice;
 
     public Long getId() {
         return id;
@@ -79,22 +66,6 @@ public class Transaction {
     public BigDecimal getCurrentValue() {
         return amount.multiply(stock.getCurrentPrice());
     }
-
-//    public BigDecimal getBuyCurrencyPrice() {
-//        return buyCurrencyPrice;
-//    }
-//
-//    public void setBuyCurrencyPrice(BigDecimal buyCurrencyPrice) {
-//        this.buyCurrencyPrice = buyCurrencyPrice;
-//    }
-//
-//    public Stock getBuyCurrency() {
-//        return buyCurrency;
-//    }
-//
-//    public void setBuyCurrency(Stock buyCurrency) {
-//        this.buyCurrency = buyCurrency;
-//    }
 
 }
 

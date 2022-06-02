@@ -24,11 +24,3 @@ VALUES
     (3, 350, 1, '2022-02-02'),
     (4, 1.2, 420, '2022-02-02'),
     (10, 210, 0.11, '2022-02-02');
-
-INSERT INTO notification
-    (title, description, date, periodic)
-VALUES
-    ('Opłacić czynsz', 'Mieszkanie - 1000zł, Parking - 170zł','2022-05-10', true),
-    ('Spotkanie FED', 'Rozmowy o stopach procentowych w Stanach czy inne pierdoły','2022-05-13', false),
-    ('Oddać hajs', 'Stówkę Zenkowi oddać','2022-06-03', false),
-    ('Dostać przelew od krissa','2850zł' ,'2022-05-30', false);

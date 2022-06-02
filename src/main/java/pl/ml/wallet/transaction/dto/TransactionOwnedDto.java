@@ -2,98 +2,16 @@ package pl.ml.wallet.transaction.dto;
 
 import java.math.BigDecimal;
 
-public class TransactionOwnedDto {
-    private int id;
-    private String name;
-    private double currentPrice;
-    private double allocation;
-    private double profit;
-    private double percentageProfit;
-    private BigDecimal amount;
-    private BigDecimal currentValue;
+public interface TransactionOwnedDto {
 
-    public TransactionOwnedDto(String name, double currentPrice, double allocation, double profit, double percentageProfit, BigDecimal amount, BigDecimal currentValue) {
-        this.name = name;
-        this.currentPrice = currentPrice;
-        this.allocation = allocation;
-        this.profit = profit;
-        this.percentageProfit = percentageProfit;
-        this.amount = amount;
-        this.currentValue = currentValue;
-    }
+    String getName();
 
-    public TransactionOwnedDto(int id, String name, double currentPrice, double allocation, double profit, double percentageProfit, BigDecimal amount, BigDecimal currentValue) {
-        this.id = id;
-        this.name = name;
-        this.currentPrice = currentPrice;
-        this.allocation = allocation;
-        this.profit = profit;
-        this.percentageProfit = percentageProfit;
-        this.amount = amount;
-        this.currentValue = currentValue;
-    }
+    String getSymbol();
 
-    public int getId() {
-        return id;
-    }
+    BigDecimal getAmount();
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    BigDecimal getCurrentPrice();
 
-    public String getName() {
-        return name;
-    }
+    Double getPercentChange();
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public double getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setCurrentPrice(double currentPrice) {
-        this.currentPrice = currentPrice;
-    }
-
-    public double getAllocation() {
-        return allocation;
-    }
-
-    public void setAllocation(double allocation) {
-        this.allocation = allocation;
-    }
-
-    public double getProfit() {
-        return profit;
-    }
-
-    public void setProfit(double profit) {
-        this.profit = profit;
-    }
-
-    public double getPercentageProfit() {
-        return percentageProfit;
-    }
-
-    public void setPercentageProfit(double percentageProfit) {
-        this.percentageProfit = percentageProfit;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
-    public BigDecimal getCurrentValue() {
-        return currentValue;
-    }
-
-    public void setCurrentValue(BigDecimal currentValue) {
-        this.currentValue = currentValue;
-    }
 }

@@ -21,14 +21,18 @@
                 </div>
             </div>
             <div class="rangeMarket">
-                <p>Range</p>
-                <select class="form-select">
-                    <option>1h</option>
-                    <option>24h</option>
-                    <option>7D</option>
-                    <option>1M</option>
-                    <option>3M</option>
-                </select>
+                <div>
+                    <a th:href="@{/market?range=1h}">
+                        <button type="button" class="btn btn-secondary">1h</button></a>
+                    <a th:href="@{/market}">
+                        <button type="button" class="btn btn-secondary">1D</button></a>
+                    <a th:href="@{/market?range=1W}">
+                        <button type="button" class="btn btn-secondary">1W</button></a>
+                    <a th:href="@{/market?range=1M}">
+                        <button type="button" class="btn btn-secondary">1M</button></a>
+                    <a th:href="@{/market?range=3M}">
+                        <button type="button" class="btn btn-secondary">3M</button></a>
+                </div>
             </div>
         </div>
         <div class="mainMarket">
@@ -47,11 +51,19 @@
                 <tr th:each="stock: ${stocks}" th:object="${stock}">
                     <td th:text="*{id}"></td>
                     <td><a th:href="@{/marketStock(symbol=*{symbol})}" th:text="*{name}"></a></td>
-                    <td><a th:href="@{/marketStock?symbol=BTC}"
+                    <td><a th:href="@{/marketStock(symbol=*{symbol})}"
                            th:text="|$*{#numbers.formatDecimal(currentPrice, 1, 'COMMA', 2, 'POINT')}|"></a></td>
                     <td class="changeStock">
-                        <p><img src="/img/upgreen24.png"></p>
-                        <p th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                        <div th:if="*{percentChange >= 0}" class="justRow">
+                            <p><img src="/img/upgreen24.png"></p>
+                            <p class="greenFont"
+                               th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                        </div>
+                        <div th:unless="*{percentChange >= 0}" class="justRow">
+                            <p th:unless="*{percentChange >= 0}"><img src="/img/downred24.png"></p>
+                            <p class="redFont"
+                               th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                        </div>
                     </td>
                     <td th:text="|$*{#numbers.formatDecimal(marketCap, 1, 'COMMA', 0, 'POINT')}|"></td>
                     <td th:if="*{favourite}"><img src="/img/starfilled24.png"></td>

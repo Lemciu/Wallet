@@ -4,7 +4,9 @@ import org.springframework.stereotype.Service;
 import pl.ml.wallet.stock.Stock;
 import pl.ml.wallet.stock.StockService;
 import pl.ml.wallet.stock.api.StockDto;
+import pl.ml.wallet.transaction.dto.AccountDto;
 import pl.ml.wallet.transaction.dto.TransactionBalanceDto;
+import pl.ml.wallet.transaction.dto.TransactionOwnedDto;
 import pl.ml.wallet.transaction.dto.TransactionProfitDto;
 
 import java.math.BigDecimal;
@@ -55,62 +57,21 @@ public class TransactionService {
         return shortDouble;
     }
 
-    public BigDecimal getProfitSaldo() {
-        return getCurrentSaldo().subtract(getInvestedValue());
+    public List<TransactionOwnedDto> findAllOwnedAccounts() {
+        return transactionRepository.findAllMyAccountsWith1hChange();
     }
 
-//    public List<TransactionOwnedDto> getAllOwnedTransactions() {
-//        List<Transaction> all = transactionRepository.findAll();
-//        Map<Stock, List<Transaction>> collect = all.stream().collect(Collectors.groupingBy(Transaction::getStock));
-//        List<TransactionOwnedDto> result = new ArrayList<>();
-//        Set<Stock> stocks = collect.keySet();
-//        List<StockDto> allStocks = stockService.getAllStocks();
-//        String name = "";
-//        allStocks.stream().filter(s -> s.getName().equals(name)).collect(Collectors.toList());
-////        s.getCurrentPrice().doubleValue() // konstruktor
-//        stocks.forEach(s -> {
-//            List<Transaction> allByStock = transactionRepository.findAllByStock(s);
-//            BigDecimal amount = allByStock.stream().map(Transaction::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);//tu zrobic częsci dziesietne
-//            result.add(new TransactionOwnedDto(s.getName(), findStockByName(allStocks, s.getSymbol()).getQuote().getUsd().getPrice().doubleValue(),
-//                    getAllocation(getSumValueOfStock(), s.getCurrentPrice()
-//                            .multiply(amount)
-//                            .setScale(2, RoundingMode.HALF_UP)).doubleValue(),
-//                    getProfit(getBuyValue(s),
-//                            s.getCurrentPrice().multiply(amount).setScale(2, RoundingMode.HALF_UP)).doubleValue(),
-//                    getPercentageProfit(getBuyValue(s), s.getCurrentPrice()
-//                            .multiply(amount)
-//                            .setScale(2, RoundingMode.HALF_UP)), amount, s.getCurrentPrice()
-//                    .multiply(amount).setScale(2, RoundingMode.HALF_UP)));
-//        });
-//        result.sort(new StockOwnedValue());
-//        AtomicInteger id = new AtomicInteger(1);
-//        result.forEach(t -> t.setId(id.getAndIncrement()));
-//        return result;
-//    }
+    public List<AccountDto> toAccountDto(List<TransactionOwnedDto> list) {
+//        map
+//        póki jest taki sam symbol to niech amount się sumuje
+        Map<String, List<TransactionOwnedDto>> collect = list.stream().collect(Collectors.groupingBy(TransactionOwnedDto::getSymbol));
 
-    private BigDecimal getBuyValue(Stock stock) {
-        return transactionRepository.findAllByStock(stock).stream().map(t -> t.getBuyPrice()
-                .multiply(t.getAmount()).setScale(2, RoundingMode.HALF_UP)).reduce(BigDecimal.ZERO, BigDecimal::add);
+        Set<String> keySet = collect.keySet();
+        // iterować to up i
+
+
+        return null;
     }
-
-    private BigDecimal getSumValueOfStock() {
-        return transactionRepository.findAll().stream().map(t -> t.getStock().getCurrentPrice()
-                .multiply(t.getAmount()).setScale(2, RoundingMode.HALF_UP)).reduce(BigDecimal.ZERO, BigDecimal::add);
-    }
-
-    private BigDecimal getAllocation(BigDecimal sumValue, BigDecimal stockValue) {
-        return stockValue.multiply(BigDecimal.valueOf(100)).divide(sumValue, 2, RoundingMode.HALF_UP);
-    }
-
-//    private BigDecimal getProfit(BigDecimal buyValue, BigDecimal currentValue) {
-//        return currentValue.subtract(buyValue);
-//    }
-//
-//    private double getPercentageProfit(BigDecimal buyValue, BigDecimal currentValue) {
-//        BigDecimal multiply = currentValue.multiply(BigDecimal.valueOf(100));
-//        BigDecimal divide = multiply.divide(buyValue, 2, RoundingMode.HALF_UP);
-//        return divide.subtract(BigDecimal.valueOf(100)).doubleValue();
-//    }
 
     public StockDto findStockByName(List<StockDto> stocks, String symbol) {
         List<StockDto> collect = stocks.stream().filter(s -> s.getSymbol().equals(symbol)).collect(Collectors.toList());
