@@ -25,61 +25,40 @@ public class TransactionService {
         this.stockService = stockService;
     }
 
-    public BigDecimal getCurrentSaldo() {
-        List<BigDecimal> reduce1 = transactionRepository.findAllToSaldo().stream().map(t -> {
-            BigDecimal a = t.getCurrentPrice();
-            BigDecimal b = t.getAmount();
-            BigDecimal c = a.multiply(b);
-            return c;
-        }).collect(Collectors.toList());
-        return reduce1.stream().reduce(BigDecimal.ZERO, BigDecimal::add).setScale(2, RoundingMode.HALF_UP);
+    public List<TransactionOwnedDto> findAllOwnedAccounts(String range) {
+        if (range == null) {
+            range = "1D";
+        }
 
-    }
+        switch (range) {
+            case "1h":
+                return transactionRepository.findAllMyAccountsWith1hChange();
+            case "1D":
+                return transactionRepository.findAllMyAccountsWith1dChange();
+            case "1W":
+                return transactionRepository.findAllMyAccountsWith7dChange();
+            case "1M":
+                return transactionRepository.findAllMyAccountsWith30dChange();
+            case "3M":
+                return transactionRepository.findAllMyAccountsWith90dChange();
+            default:
+                throw new IllegalStateException("Unexpected value: " + range);
+        }
 
-    public BigDecimal getInvestedValue() {
-        MathContext m = new MathContext(2);
-        List<BigDecimal> reduce1 = transactionRepository.findAllToSaldo().stream().map(t -> {
-            BigDecimal a = t.getBuyPrice();
-            BigDecimal b = t.getAmount();
-            BigDecimal c = a.multiply(b, m);
-            return c;
-        }).collect(Collectors.toList());
-        BigDecimal reduce = reduce1.stream().reduce(BigDecimal.ZERO, BigDecimal::add);
-        return reduce;
-    }
-
-    public double getPercentageProfitSaldo() {
-        double currentSaldo = getCurrentSaldo().doubleValue();
-        double investedValue = getInvestedValue().doubleValue();
-        double result = ((currentSaldo * 100) / investedValue) - 100;
-        int temp = (int) (result * 100);
-        double shortDouble = ((double) temp) / 100;
-        return shortDouble;
-    }
-
-    public List<TransactionOwnedDto> findAllOwnedAccounts() {
-        return transactionRepository.findAllMyAccountsWith1hChange();
     }
 
     public List<AccountDto> toAccountDto(List<TransactionOwnedDto> list) {
-//        map
-//        póki jest taki sam symbol to niech amount się sumuje
         Map<String, List<TransactionOwnedDto>> collect = list.stream().collect(Collectors.groupingBy(TransactionOwnedDto::getSymbol));
-
+        List<AccountDto> result = new ArrayList<>();
         Set<String> keySet = collect.keySet();
-        // iterować to up i
+        keySet.forEach(k -> {
+            List<TransactionOwnedDto> list1 = collect.get(k);
+            BigDecimal sumOfAmount = list1.stream().map(TransactionOwnedDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            result.add(new AccountDto(list1.get(0).getName(), list1.get(0).getSymbol(), sumOfAmount,
+                    list1.get(0).getCurrentPrice().multiply(sumOfAmount), list1.get(0).getPercentChange()));
+        });
 
-
-        return null;
-    }
-
-    public StockDto findStockByName(List<StockDto> stocks, String symbol) {
-        List<StockDto> collect = stocks.stream().filter(s -> s.getSymbol().equals(symbol)).collect(Collectors.toList());
-        if (collect.isEmpty()) {
-            return stocks.get(0);
-        } else {
-            return collect.get(0);
-        }
+        return result;
     }
 
     public BigDecimal getTotalBalance() {
@@ -143,6 +122,5 @@ public class TransactionService {
             return divide;
         }).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-
 
 }

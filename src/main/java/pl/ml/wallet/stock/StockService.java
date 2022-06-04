@@ -17,50 +17,43 @@ import java.util.stream.Collectors;
 public class StockService {
     // paginacje zrobić na markecie
     private StockRepository stockRepository;
-    private static final String URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=3a006fe7-4d68-4939-8b7b-d2442e3405bb&start=1&limit=10";
+    private static final String URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=3a006fe7-4d68-4939-8b7b-d2442e3405bb&start=1&limit=60";
 
     public StockService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
     }
 
-    public List<StockMarketDto> findAll(String range) {
+    public List<StockMarketDto> findAll(String title, String range) {
+        List<StockMarketDto> stocks;
         if (range == null) {
             range = "1D";
         }
         switch (range) {
             case "1h":
-                return stockRepository.findAllStockMarketDtoWith1hChange();
+                stocks = stockRepository.findAllStockMarketDtoWith1hChange();
+                break;
             case "1D":
-                return stockRepository.findAllStockMarketDtoWith24hChange();
+                stocks = stockRepository.findAllStockMarketDtoWith24hChange();
+                break;
             case "1W":
-                return stockRepository.findAllStockMarketDtoWith7dChange();
+                stocks = stockRepository.findAllStockMarketDtoWith7dChange();
+                break;
             case "1M":
-                return stockRepository.findAllStockMarketDtoWith30dChange();
+                stocks = stockRepository.findAllStockMarketDtoWith30dChange();
+                break;
             case "3M":
-                return stockRepository.findAllStockMarketDtoWith90dChange();
+                stocks = stockRepository.findAllStockMarketDtoWith90dChange();
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + range);
         }
+
+        if (title != null) {
+            return stocks.stream().filter(s -> s.getSymbol().toLowerCase().contains(title.toLowerCase()) || s.getName().toLowerCase().contains(title.toLowerCase())).collect(Collectors.toList());
+        } else {
+            return stocks;
+        }
     }
-
-    public List<StockDto> getAllStocks() {
-        RestTemplate restTemplate = new RestTemplate();
-
-        StockResponseDto forObject = restTemplate.getForObject(URL, StockResponseDto.class);
-        return forObject.getData();
-    }
-
-//    public List<StockMarketDto> findByName(String name) {
-//        if (name == null) {
-////            return findAllStocksToMarket();
-//            return null;
-//        } else {
-//            return stockRepository.findByNameContainingIgnoreCase(name)
-//                    .stream()
-//                    .map(this::toMarketDto)
-//                    .collect(Collectors.toList());
-//        }
-//    }
 
     public StockMarketProfileDto toMarketDto(Stock stock, String range) {
         StockMarketProfileDto dto = new StockMarketProfileDto();
@@ -145,7 +138,7 @@ public class StockService {
                 break;
 
             default:
-//                throw new IllegalStateException("Unexpected value: " + sort);
+                throw new IllegalStateException("Unexpected value: " + sort);
         }
     }
 
@@ -196,23 +189,8 @@ public class StockService {
         });
     }
 
-//    public List<StockMarketDto> findAllStocksToMarket() {
-//        List<Stock> all = stockRepository.findAll();
-//        AtomicInteger id = new AtomicInteger(1);
-//
-//        return all.stream().map(s ->
-//                new StockMarketDto(id.getAndIncrement(), s.getName(), s.getSymbol(),
-//                        s.getCurrentPrice(), s.getMarketCap(), s.getPercentChange1H(),
-//                        s.getPercentChange24H(), s.getPercentChange7D(), s.isFavourite())
-//        ).collect(Collectors.toList());
-//    }
-
     public void save(Stock stock) {
         stockRepository.save(stock);
-    }
-
-    public Optional<Stock> findById(Long id) {
-        return stockRepository.findById(id);
     }
 
     public Optional<Stock> findBySymbol(String symbol) {

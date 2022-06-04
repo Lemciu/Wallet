@@ -15,22 +15,23 @@
         <div class="marketHeader">
             <div>
                 <h2 id="MarketTitle">MARKET</h2>
-                <div id="findInMarket">
-                    <input type="search" class="form-control" id="searchMarketBar" th:placeholder="Search"/>
-                    <button class="btn btn-secondary" type="submit"><img src="/img/whitemagnifier30.png"></button>
-                </div>
+                    <form action="/market" id="findInMarket">
+                        <input type="search" class="form-control" id="searchMarketBar" th:placeholder="Search" th:value="${title}" name="title"/>
+                        <button class="btn btn-secondary" type="submit"><img src="/img/whitemagnifier30.png"></button>
+                        <button th:if="${title} != '' AND ${title} != null" class="btn btn-secondary" th:title="Clear"><a th:href="@{/market}"><img src="/img/x24.png"></a></button>
+                    </form>
             </div>
             <div class="rangeMarket">
                 <div>
-                    <a th:href="@{/market?range=1h}">
+                    <a th:href="@{/market(title=${title}, range=1h)}">
                         <button type="button" class="btn btn-secondary">1h</button></a>
-                    <a th:href="@{/market}">
+                    <a th:href="@{/market(title=${title})}">
                         <button type="button" class="btn btn-secondary">1D</button></a>
-                    <a th:href="@{/market?range=1W}">
+                    <a th:href="@{/market(title=${title}, range=1W)}">
                         <button type="button" class="btn btn-secondary">1W</button></a>
-                    <a th:href="@{/market?range=1M}">
+                    <a th:href="@{/market(title=${title}, range=1M)}">
                         <button type="button" class="btn btn-secondary">1M</button></a>
-                    <a th:href="@{/market?range=3M}">
+                    <a th:href="@{/market(title=${title}, range=3M)}">
                         <button type="button" class="btn btn-secondary">3M</button></a>
                 </div>
             </div>
@@ -70,8 +71,11 @@
                     <td th:unless="*{favourite}"><img src="/img/whitestar24.png"></td>
                 </tr>
                 </tbody>
-
             </table>
+            <div class="paging">
+                <button class="btn btn-secondary">Previous</button>
+                <a th:href="@{/market(page=2)}"><button class="btn btn-secondary">NextClassic</button></a>
+            </div>
         </div>
     </div>
 </div>

@@ -1,5 +1,6 @@
 package pl.ml.wallet.stock;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import pl.ml.wallet.stock.dto.StockMarketDto;

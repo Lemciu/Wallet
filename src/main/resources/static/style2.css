@@ -90,8 +90,10 @@
     margin-top: 40px;
     margin-left: 40px;
     margin-right: 50px;
+    padding-top: 20px;
     padding-left: 40px;
     padding-right: 40px;
+    padding-bottom: 40px;
 }
 .exchangeOption {
     display: flex;
@@ -177,7 +179,13 @@
     padding-top: 40px;
     padding-bottom: 20px;
 }
+.accountHeaderButtons {
+    padding-top: 20px;
+}
 .accountStockHeader {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     padding-top: 20px;
     padding-bottom: 20px;
     margin-left: 40px;
@@ -282,7 +290,8 @@
     color: white;
 }
 #accountsTable td {
-    padding-top: 50px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 
 }
 #priceRow {
@@ -293,6 +302,9 @@
     display:block;
     text-decoration:none;
     color: white;
+}
+#marketTable td {
+    padding-bottom: 0;
 }
 .accountHead h2 {
     margin-left: 40px;
@@ -346,13 +358,25 @@
     background-color: #444444
 
 }
+.paging {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
 .mainMarket {
     margin-top: 60px;
     margin-right: 50px;
     margin-left: 40px;
+    padding-bottom: 50px;
 }
 .mainMarket table {
     color: white;
+
+}
+#accountTable {
+    color: white;
+    /*padding-bottom: 90px;*/
 
 }
 .rangeMarket {

@@ -3,11 +3,13 @@ package pl.ml.wallet.stock;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.ml.wallet.stock.dto.StockMarketDto;
 import pl.ml.wallet.stock.dto.StockMarketProfileDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class StockController {
@@ -15,11 +17,6 @@ public class StockController {
 
     public StockController(StockService stockService) {
         this.stockService = stockService;
-    }
-
-    @GetMapping("/accountStock")
-    public String accountStock(@RequestParam String symbol, Model model) {
-        return "accountStock";
     }
 
     @GetMapping("/marketStock")
@@ -44,14 +41,21 @@ public class StockController {
         return "market";
     }
 
-    @GetMapping("/market")
+    @GetMapping("/market")// market/2
     public String market(@RequestParam(required = false) String sort,
                          @RequestParam(required = false) String range,
-                         @RequestParam(required = false) String findStock,
+                         @RequestParam(required = false) String title,
+                         @PathVariable(required = false) String page,
                          Model model) {
-        List<StockMarketDto> stocks = stockService.findAll(range);
-        model.addAttribute("stocks", stocks);
+        model.addAttribute("title", title);
+        List<StockMarketDto> stocks = stockService.findAll(title, range);
+//        stocks.stream().filter(s -> s.getId() <= 20).collect(Collectors.toList());
+        model.addAttribute("stocks", stocks.stream().filter(s -> s.getId() <= 20).collect(Collectors.toList()));
+        System.out.println("Range: " + range);
+        System.out.println("Title: " + title);
+        System.out.println("Page: " + page);
         return "market";
+
     }
 
     @GetMapping("/addToFavourite") // scalić te metody

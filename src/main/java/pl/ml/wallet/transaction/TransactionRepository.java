@@ -12,12 +12,6 @@ import java.util.List;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
 
-    @Query("SELECT t.amount AS amount, t.buyPrice AS buyPrice, s.currentPrice AS currentPrice " +
-            "FROM Transaction t LEFT JOIN Stock s ON t.stock.id = s.id")
-    List<TransactionDto> findAllToSaldo();
-
-    List<Transaction> findAllByStock(Stock stock);
-
     @Query("SELECT t.amount AS amount, s.currentPrice AS currentPrice " +
             "FROM Transaction t LEFT JOIN Stock s ON t.stock.id = s.id")
     List<TransactionBalanceDto> findAllToGetTotalBalance();
@@ -48,5 +42,17 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT s.name AS name, s.symbol AS symbol, t.amount AS amount, s.currentPrice AS currentPrice, s.percentChange1H AS percentChange FROM Stock s JOIN Transaction t ON s.id = t.stock.id")
     List<TransactionOwnedDto> findAllMyAccountsWith1hChange();
+
+    @Query("SELECT s.name AS name, s.symbol AS symbol, t.amount AS amount, s.currentPrice AS currentPrice, s.percentChange24H AS percentChange FROM Stock s JOIN Transaction t ON s.id = t.stock.id")
+    List<TransactionOwnedDto> findAllMyAccountsWith1dChange();
+
+    @Query("SELECT s.name AS name, s.symbol AS symbol, t.amount AS amount, s.currentPrice AS currentPrice, s.percentChange7D AS percentChange FROM Stock s JOIN Transaction t ON s.id = t.stock.id")
+    List<TransactionOwnedDto> findAllMyAccountsWith7dChange();
+
+    @Query("SELECT s.name AS name, s.symbol AS symbol, t.amount AS amount, s.currentPrice AS currentPrice, s.percentChange30D AS percentChange FROM Stock s JOIN Transaction t ON s.id = t.stock.id")
+    List<TransactionOwnedDto> findAllMyAccountsWith30dChange();
+
+    @Query("SELECT s.name AS name, s.symbol AS symbol, t.amount AS amount, s.currentPrice AS currentPrice, s.percentChange90D AS percentChange FROM Stock s JOIN Transaction t ON s.id = t.stock.id")
+    List<TransactionOwnedDto> findAllMyAccountsWith90dChange();
 
 }

@@ -33,7 +33,7 @@
             </div>
             <div class="accountStockChange">
                 <p id="accountChangeValue"><img src="/img/upgreen24.png"> 2% (-$73.92)</p>
-                <div class="changeRangeButtons">
+                <div>
                     <button type="button" class="btn btn-secondary">1h</button>
                     <button type="button" class="btn btn-secondary">1D</button>
                     <button type="button" class="btn btn-secondary">1W</button>
@@ -44,6 +44,31 @@
         </div>
         <div class="accountStockHistory">
             <p>Latest operations</p>
+<!--            wyświetla 10 ostatnich? a jak więcej to kliknie się, żeby załadował albo na strony? oo-->
+            <table class="table" id="accountTable">
+                <thead>
+                <tr>
+                    <th>Deal</th>
+                    <th>Amount</th>
+                    <th>Value</th>
+                    <th>Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>BTC -> ADA</td>
+                    <td>-0.00923 BTC</td>
+                    <td>$212.23</td>
+                    <td>13 April</td>
+                </tr>
+                <tr>
+                    <td>USDT -> BTC</td>
+                    <td>+0.00412 BTC</td>
+                    <td>$312.23</td>
+                    <td>16 April</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
