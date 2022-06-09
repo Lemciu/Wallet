@@ -40,7 +40,7 @@
                 <tbody>
                 <tr th:each="account: ${accounts}" th:object="${account}">
                     <td><a th:href="@{/accountStock(symbol=*{symbol})}" th:text="*{name}"></a></td>
-                    <td><a href="#" th:text="|*{amount} *{symbol}|">0.1032 BTC</a></td>
+                    <td><a href="#" th:text="|*{amount} *{symbol}|"></a></td>
                     <td><a href="#" th:text="|$*{#numbers.formatDecimal(value, 1, 'COMMA', 2, 'POINT')}|"></a></td>
                     <td th:if="*{percentChange >= 0}" class="justRow">
                         <p><img src="/img/upgreen24.png"></p>

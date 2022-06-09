@@ -51,9 +51,9 @@ public class StockController {
                          @PathVariable(required = false) String page,
                          Model model) {
         model.addAttribute("title", title);
+        model.addAttribute("range", range);
         List<StockMarketDto> stocks = stockService.findAll(title, range);
         model.addAttribute("stocks", stocks.stream().filter(s -> s.getId() <= 20).collect(Collectors.toList()));
-        System.out.println("Title: " + title);
         return "market";
 
     }
@@ -75,19 +75,62 @@ public class StockController {
     }
 
     @GetMapping("/addToFavouriteInMarket") // scalić te metody
-    public String addToFavouriteInMarket(@RequestParam String symbol) {
+    public String addToFavouriteInMarket(Model model,
+                                         @RequestParam String symbol,
+                                         @RequestParam(required = false) String range,
+                                         @RequestParam(required = false) String title) {
+        System.out.println("Add:");
+        System.out.println("symbol: " + symbol);
+        System.out.println("range: " + range);
+        System.out.println("title: " + title);
+        ////////////////////////////////
+        model.addAttribute("title", title);
+        model.addAttribute("range", range);
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stock.setFavourite(true);
         stockService.save(stock);
-        return "redirect:/market";
+        if (title == null) {
+            title = "";
+        }
+        if (range == null) {
+            range = "";
+        }
+        if (!range.equals("")) {
+            return "redirect:/market?title=" + title + "&range=" + range;
+        }
+        else {
+            return "redirect:/market?title=" + title;
+        }
     }
 
     @GetMapping("/deleteFromFavouriteInMarket")
-    public String deleteFromFavouriteInMarket(@RequestParam String symbol) {
+    public String deleteFromFavouriteInMarket(Model model,
+                                              @RequestParam String symbol,
+                                              @RequestParam(required = false) String range,
+                                              @RequestParam(required = false) String title) {
+        System.out.println("Delete:");
+        System.out.println("symbol: " + symbol);
+        System.out.println("range: " + range);
+        System.out.println("title: " + title);
+        ////////////////////////////////
+        model.addAttribute("title", title);
+        model.addAttribute("range", range);
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stock.setFavourite(false);
         stockService.save(stock);
-        return "redirect:/market";
+
+        if (title == null) {
+            title = "";
+        }
+        if (range == null) {
+            range = "";
+        }
+        if (!range.equals("")) {
+            return "redirect:/market?title=" + title + "&range=" + range;
+        }
+        else {
+            return "redirect:/market?title=" + title;
+        }
     }
 
 }

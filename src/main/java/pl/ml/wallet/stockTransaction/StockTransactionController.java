@@ -30,8 +30,8 @@ public class StockTransactionController {
                                @RequestParam (required = false) String range,
                                 Model model) {
         model.addAttribute("stock", stockTransactionService.findAllTransactionToProfile(symbol, range));
-        model.addAttribute("accounts",
-                stockTransactionService.toAccountDto(stockTransactionService.findAllOwnedAccounts(range)));
+//        model.addAttribute("percentageProfit", stockTransactionService.getPercentageProfit(range));
+//        model.addAttribute("profit", stockTransactionService.getProfit(range));
 //        stockname,symbol,currentprice, amount, amountValue, percentChange, latestTransaction(btc -> ADA, ilość +/- tego na której stronie jesteśmy)
         return "accountStock";
     }

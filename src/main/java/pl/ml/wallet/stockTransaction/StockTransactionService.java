@@ -34,7 +34,7 @@ public class StockTransactionService {
         if (range == null) {
             range = "1D";
         }
-
+//opakować to w metody i ostatni też.
         switch (range) {
             case "1h":
                 transactions = stockTransactionRepository.findAllTransactionToProfileWith1hChange(symbol);
@@ -51,17 +51,60 @@ public class StockTransactionService {
             case "3M":
                 transactions = stockTransactionRepository.findAllTransactionToProfileWith90dChange(symbol);
                 break;
+            case "max":
+                transactions = stockTransactionRepository.findAllTransactionToProfileWithAllChange(symbol);
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + range);
         }
 
-        BigDecimal amount = transactions.stream().map(TransactionOwnedDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal currentPrice = transactions.get(0).getCurrentPrice();
-//        amount.multiply(currentPrice).multiply(BigDecimal.valueOf(transactions.get(0).getPercentChange()))
-        BigDecimal value = amount.multiply(currentPrice);
-        BigDecimal valueChange = value.multiply(BigDecimal.valueOf(transactions.get(0).getPercentChange())).divide(BigDecimal.valueOf(100), MathContext.DECIMAL64);
-        return new AccountProfileDto(transactions.get(0).getName(), transactions.get(0).getSymbol(), amount,
+        if (range.equals("max")) {
+//            s.name AS name,
+//            s.symbol AS symbol,
+//            s.favourite AS favourite
+//            t.amount AS amount,
+//            s.currentPrice AS currentPrice,
+//            t.price AS buyPrice
+            BigDecimal amount = transactions.stream().map(TransactionOwnedDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal currentPrice = transactions.get(0).getCurrentPrice();
+            BigDecimal currentValue = amount.multiply(currentPrice);
+
+//            to musi być strumień
+            BigDecimal buyValue = transactions.stream().map(t -> t.getAmount().multiply(t.getBuyPrice())).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            BigDecimal valueChange = currentValue.subtract(buyValue);
+
+//            kupiliśmy 100, dzisiaj warte 75 czyli -25%
+//            kupiliśmy 200, dzisiaj warte 220 czyli +10%
+
+            BigDecimal m1 = currentValue.multiply(BigDecimal.valueOf(100));
+            BigDecimal divide = m1.divide(buyValue, MathContext.DECIMAL64);
+
+            BigDecimal percentChange = divide.subtract(BigDecimal.valueOf(100));
+
+//            String name, String symbol, BigDecimal amount, BigDecimal value, Double percentChange, BigDecimal valueChange, boolean favourite, BigDecimal currentPrice
+//        valuechange i percentChagne
+
+            return new AccountProfileDto(transactions.get(0).getName(), transactions.get(0).getSymbol(), amount,
+                    amount.multiply(currentPrice), percentChange.doubleValue(), valueChange, transactions.get(0).getFavourite(), currentPrice);
+
+        } else {
+
+            BigDecimal amount = transactions.stream().map(TransactionOwnedDto::getAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+            BigDecimal currentPrice = transactions.get(0).getCurrentPrice();
+            BigDecimal value = amount.multiply(currentPrice);
+            BigDecimal valueChange = value.multiply(BigDecimal.valueOf(transactions.get(0).getPercentChange())).divide(BigDecimal.valueOf(100), MathContext.DECIMAL64);
+
+            return new AccountProfileDto(transactions.get(0).getName(), transactions.get(0).getSymbol(), amount,
                         amount.multiply(currentPrice), transactions.get(0).getPercentChange(), valueChange, transactions.get(0).getFavourite(), currentPrice);
+
+        }
+
+    }
+
+    private  List<TransactionOwnedDto> getDtoWithAllChange(String symbol) {
+        return stockTransactionRepository.findAllTransactionToProfileWithAllChange(symbol);
     }
 
     public List<TransactionOwnedDto> findAllOwnedAccounts(String range) {
@@ -130,6 +173,29 @@ public class StockTransactionService {
         return multiply.divide(totalBalance, RoundingMode.HALF_UP);
     }
 
+    public BigDecimal getProfitAccount(String range) {
+        if (range == null) {
+            range = "1D";
+        }
+
+        switch (range) {
+            case "1h":
+                return getProfitOfStock(stockTransactionRepository.findAllToGet1hProfit()).setScale(2, RoundingMode.HALF_UP);
+            case "1D":
+                return getProfitOfStock(stockTransactionRepository.findAllToGet24hProfit()).setScale(2, RoundingMode.HALF_UP);
+            case "1W":
+                return getProfitOfStock(stockTransactionRepository.findAllToGet7dProfit()).setScale(2, RoundingMode.HALF_UP);
+            case "1M":
+                return getProfitOfStock(stockTransactionRepository.findAllToGet30dProfit()).setScale(2, RoundingMode.HALF_UP);
+            case "3M":
+                return getProfitOfStock(stockTransactionRepository.findAllToGet90dProfit()).setScale(2, RoundingMode.HALF_UP);
+            case "max":
+                return getFinalProfitOfStock(stockTransactionRepository.findAllToGetWholeProfit()).setScale(2, RoundingMode.HALF_UP);
+            default:
+                return null;
+        }
+    }
+
     public BigDecimal getProfit(String range) {
         if (range == null) {
             range = "1D";
@@ -147,14 +213,14 @@ public class StockTransactionService {
             case "3M":
                 return getProfitOfStock(stockTransactionRepository.findAllToGet90dProfit()).setScale(2, RoundingMode.HALF_UP);
             case "max":
-                return getReduceToWholeRename(stockTransactionRepository.findAllToGetWholeProfit()).setScale(2, RoundingMode.HALF_UP);
+                return getFinalProfitOfStock(stockTransactionRepository.findAllToGetWholeProfit()).setScale(2, RoundingMode.HALF_UP);
             default:
                 return null;
         }
 
     }
 
-    private BigDecimal getReduceToWholeRename(List<TransactionProfitDto> transactions) {
+    private BigDecimal getFinalProfitOfStock(List<TransactionProfitDto> transactions) {
         return transactions.stream().map(t -> {
             BigDecimal amount = t.getAmount();
             BigDecimal currentPrice = t.getCurrentPrice();

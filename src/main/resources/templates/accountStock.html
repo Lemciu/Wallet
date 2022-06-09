@@ -31,7 +31,7 @@
             <div>
                 <p th:text="|$*{#numbers.formatDecimal(stock.value, 1, 'COMMA', 2, 'POINT')}|" id="accountStockValue"></p>
                 <div id="amountStock">
-                    <p th:text="|*{#numbers.formatDecimal(stock.amount, 1, 'COMMA', 2, 'POINT')} ${stock.symbol}|"></p>
+                    <p th:text="|*{#numbers.formatDecimal(stock.amount, 1, 'COMMA', 5, 'POINT')} ${stock.symbol}|"></p>
                     <p th:text="|1 ${stock.symbol} = *{#numbers.formatDecimal(stock.currentPrice, 1, 'COMMA', 2, 'POINT')}|"></p>
                 </div>
             </div>
@@ -49,6 +49,8 @@
                     <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=1W|"><button type="button" class="btn btn-secondary">1W</button></a>
                     <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=1M|"><button type="button" class="btn btn-secondary">1M</button></a>
                     <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=3M|"><button type="button" class="btn btn-secondary">3M</button></a>
+<!--                    Czy żeby dodać to All muszę zrezygnować z intefejsu i dać normalny obiekt klasy żeby to policzyć-->
+                    <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=max|"><button type="button" class="btn btn-secondary">max</button></a>
                 </div>
             </div>
         </div>

@@ -17,6 +17,7 @@ public class StockTransaction {
     private LocalDate date;
     @ManyToOne
     private Stock stock;
+    @Column(scale = 6, precision = 10)
     private BigDecimal amount;
     private BigDecimal price;
     @Enumerated(EnumType.STRING)
@@ -28,6 +29,9 @@ public class StockTransaction {
         this.amount = amount;
         this.price = price;
         this.type = type;
+    }
+
+    public StockTransaction() {
     }
 
     public Long getId() {

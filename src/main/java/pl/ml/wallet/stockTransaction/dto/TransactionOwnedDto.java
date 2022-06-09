@@ -14,6 +14,8 @@ public interface TransactionOwnedDto {
 
     Double getPercentChange();
 
+    BigDecimal getBuyPrice();
+
     Boolean getFavourite();
 
 }

@@ -79,4 +79,7 @@ public interface StockTransactionRepository extends JpaRepository<StockTransacti
     @Query("SELECT s.name AS name, s.symbol AS symbol, s.favourite AS favourite, t.amount AS amount, s.percentChange90D AS percentChange, s.currentPrice AS currentPrice FROM StockTransaction t LEFT JOIN Stock s ON s.id = t.stock.id WHERE s.symbol = ?#{[0]}")
     List<TransactionOwnedDto> findAllTransactionToProfileWith90dChange(String symbol);
 
+    @Query("SELECT s.name AS name, s.symbol AS symbol, s.favourite AS favourite, t.amount AS amount, s.currentPrice AS currentPrice, t.price AS buyPrice FROM StockTransaction t LEFT JOIN Stock s ON s.id = t.stock.id WHERE s.symbol = ?#{[0]}")
+    List<TransactionOwnedDto> findAllTransactionToProfileWithAllChange(String symbol);
+
 }

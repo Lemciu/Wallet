@@ -13,7 +13,9 @@ public class AccountProfileDto {
     private BigDecimal currentPrice;
 
     public AccountProfileDto() {
+//        podpiąc to podobnie do tego z portfolio ?
     }
+//    dwa dobre konstruktory:
 
     public AccountProfileDto(String name, String symbol, BigDecimal amount, BigDecimal value, Double percentChange, BigDecimal valueChange, boolean favourite, BigDecimal currentPrice) {
         this.name = name;
