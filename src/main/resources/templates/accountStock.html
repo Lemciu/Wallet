@@ -14,8 +14,12 @@
         <div th:replace="fragments :: topHeader"></div>
         <div class="accountStockHeader">
             <div>
-                <h2>Bitcoin <img src="/img/whitestar24.png"></h2>
-                <p id="stockSymbol">BTC</p>
+                <div class="justRow">
+                    <h2 th:text="${stock.name}"></h2>
+                    <p th:if="${stock.favourite}"><img src="/img/starfilled24.png"></p>
+                    <p th:unless="${stock.favourite}"><img src="/img/whitestar24.png"></p>
+                </div>
+                <p id="stockSymbol" th:text="${stock.symbol}"></p>
             </div>
             <div class="accountHeaderButtons">
                 <button class="btn btn-secondary">Buy</button>
@@ -25,26 +29,32 @@
         </div>
         <div class="accountStockPrice">
             <div>
-                <p id="accountStockValue">$2,923.23</p>
+                <p th:text="|$*{#numbers.formatDecimal(stock.value, 1, 'COMMA', 2, 'POINT')}|" id="accountStockValue"></p>
                 <div id="amountStock">
-                    <p>0.10234 BTC</p>
-                    <p>1 BTC = $28,978.00</p>
+                    <p th:text="|*{#numbers.formatDecimal(stock.amount, 1, 'COMMA', 2, 'POINT')} ${stock.symbol}|"></p>
+                    <p th:text="|1 ${stock.symbol} = *{#numbers.formatDecimal(stock.currentPrice, 1, 'COMMA', 2, 'POINT')}|"></p>
                 </div>
             </div>
             <div class="accountStockChange">
-                <p id="accountChangeValue"><img src="/img/upgreen24.png"> 2% (-$73.92)</p>
+                <div class="portfolioProfit">
+                    <p th:if="${stock.percentChange >= 0}"><img src="/img/upgreen24.png"></p>
+                    <p th:if="${stock.percentChange >= 0}" id="portfolioPlusProfit" th:text="|*{#numbers.formatDecimal(stock.percentChange, 1, 'COMMA', 2, 'POINT')}% (+$ *{#numbers.formatDecimal(stock.valueChange, 1, 'COMMA', 2, 'POINT')})|"></p>
+
+                    <p th:unless="${stock.percentChange >= 0}"><img src="/img/downred24.png"></p>
+                    <p th:unless="${stock.percentChange >= 0}" id="portfolioMinusProfit" th:text="|*{#numbers.formatDecimal(stock.percentChange, 1, 'COMMA', 2, 'POINT')}% ($ *{#numbers.formatDecimal(stock.valueChange, 1, 'COMMA', 2, 'POINT')})|"></p>
+                </div>
                 <div>
-                    <button type="button" class="btn btn-secondary">1h</button>
-                    <button type="button" class="btn btn-secondary">1D</button>
-                    <button type="button" class="btn btn-secondary">1W</button>
-                    <button type="button" class="btn btn-secondary">1M</button>
-                    <button type="button" class="btn btn-secondary">3M</button>
+                    <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=1h|"><button type="button" class="btn btn-secondary">1h</button></a>
+                    <a th:href="|@{/accountStock?symbol=}${stock.symbol}|"><button type="button" class="btn btn-secondary">1D</button></a>
+                    <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=1W|"><button type="button" class="btn btn-secondary">1W</button></a>
+                    <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=1M|"><button type="button" class="btn btn-secondary">1M</button></a>
+                    <a th:href="|@{/accountStock?symbol=}${stock.symbol}&range=3M|"><button type="button" class="btn btn-secondary">3M</button></a>
                 </div>
             </div>
         </div>
         <div class="accountStockHistory">
             <p>Latest operations</p>
-<!--            wyświetla 10 ostatnich? a jak więcej to kliknie się, żeby załadował albo na strony? oo-->
+            <!--            wyświetla 10 ostatnich? a jak więcej to kliknie się, żeby załadował albo na strony? oo-->
             <table class="table" id="accountTable">
                 <thead>
                 <tr>

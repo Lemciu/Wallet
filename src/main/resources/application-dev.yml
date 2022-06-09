@@ -4,6 +4,8 @@ spring:
   jpa.defer-datasource-initialization: true
   jpa:
     show-sql: true
+    hibernate:
+      ddl-auto: create
   sql:
     init:
       mode: always

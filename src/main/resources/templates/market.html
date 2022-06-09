@@ -67,8 +67,8 @@
                         </div>
                     </td>
                     <td th:text="|$*{#numbers.formatDecimal(marketCap, 1, 'COMMA', 0, 'POINT')}|"></td>
-                    <td th:if="*{favourite}"><img src="/img/starfilled24.png"></td>
-                    <td th:unless="*{favourite}"><img src="/img/whitestar24.png"></td>
+                    <td th:if="*{favourite}"><a th:href="@{/deleteFromFavouriteInMarket(symbol=*{symbol})}"><img src="/img/starfilled24.png"></a></td>
+                    <td th:unless="*{favourite}"><a th:href="@{/addToFavouriteInMarket(symbol=*{symbol})}"><img src="/img/whitestar24.png"></a></td>
                 </tr>
                 </tbody>
             </table>

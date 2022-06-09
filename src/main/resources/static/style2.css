@@ -100,7 +100,17 @@
     flex-direction: row;
 }
 .tradeHeader {
-    margin-left: 40px;
+    display: flex;
+    flex-direction: row;
+    margin-left: 50px;
+}
+.tradeHeader h3 {
+    background-color: #444444;
+    padding-left: 20px;
+    padding-top: 15px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 0;
 }
 .exchange p {
     margin-bottom: 0;
@@ -147,12 +157,21 @@
     margin-bottom: 0;
 }
 .tradeTop {
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
+}
+.formBuy {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+#tradeButton {
+    margin-bottom: 0;
+    width: 100px;
 }
 .tradeCenter {
     display: flex;
     flex-direction: column;
-    margin-left: 40px;
+    /*justify-content: space-between;*/
+    margin-left: 50px;
     margin-right: 50px;
     padding-left: 340px;
     padding-right: 340px;
@@ -165,9 +184,34 @@
     margin-top: 30px;
     margin-bottom: 50px;
 }
+
 #tradeValue {
     color: white;
     margin-top: 20px;
+    margin-bottom: 0;
+}
+.stockListMain {
+    margin-left: 40px;
+    margin-right: 50px;
+    padding-left: 340px;
+    padding-right: 340px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    background-color: #444444;
+}
+.stockListMain table {
+    color: white;
+}
+.listStocks table {
+    color: white;
+}
+#calculate {
+    width: 100px;
+    margin-top: 0;
+}
+#tradeValue button {
+    padding-top: 0;
+    margin-top: 0;
 }
 .accountStockPrice {
     margin-left: 40px;
@@ -363,7 +407,31 @@
     flex-direction: row;
     justify-content: center;
 }
-
+.selectStock {
+    display: flex;
+    flex-direction: row;
+}
+.selectStock select {
+    height: 50px;
+}
+.selectStock button {
+    margin-top: 0;
+    margin-bottom: 0;
+    /*height: 50px;*/
+    /*width: 50px;*/
+}
+.stockAmount {
+    margin-top: 40px;
+}
+.mainCash {
+    margin-top: 60px;
+    margin-right: 50px;
+    margin-left: 40px;
+    padding-bottom: 50px;
+}
+.mainCash table {
+    color: white;
+}
 .mainMarket {
     margin-top: 60px;
     margin-right: 50px;
@@ -469,12 +537,29 @@
     margin-left: 50px;
     margin-right: 50px;
 }
+.mainBudget {
+    background-color: #444444;
+    margin-top: 50px;
+    margin-left: 50px;
+    margin-right: 50px;
+}
 .headCenter {
     display: flex;
     flex-direction: row;
     margin-top: 30px;
-
     justify-content: space-between;
+}
+.budget {
+    margin-left: 30px;
+    padding-top: 30px;
+    padding-bottom: 20px;
+}
+.budget p {
+    color: darkgray;
+}
+.budget h2 {
+    color: white;
+    margin-bottom: 0;
 }
 .totalBalance {
     margin-left: 30px;
@@ -555,3 +640,65 @@
     justify-content: space-between;
 }
 
+.dropdown {
+    position: relative;
+}
+.dropdown-menu {
+    position: relative;
+}
+.dropdown-item {
+    position: relative;
+}
+.dropdownMenuButton {
+    position: relative;
+}
+.dropbtn {
+    background-color: #444444;
+    color: white;
+    padding: 16px;
+    font-size: x-large;
+    border: none;
+    cursor: pointer;
+}
+.headForm {
+
+}
+.availableFunds {
+
+}
+.availableFunds p {
+    color: darkgray;
+    margin-bottom: 20px;
+}
+.availableFunds h2 {
+    margin-bottom: 0;
+}
+.dropbtn:hover, .dropbtn:focus {
+    background-color: #5c636a
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}

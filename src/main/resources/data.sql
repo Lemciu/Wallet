@@ -62,16 +62,21 @@ VALUES
     (59, 'FTM', false),
     (60, 'RUNE', false);
 
-
-INSERT INTO transaction
-    (stock_id, amount, buy_price, date)
+INSERT INTO stock_transaction
+    (stock_id, amount, price, date, type)
 VALUES
-    (1, 0.05, 38000.57, '2022-02-02'),
-    (1, 0.02, 36000.01, '2022-02-02'),
-    (1, 0.03, 37500, '2022-02-02'),
-    (2, 0.2, 3200, '2022-02-02'),
-    (2, 0.1, 2700, '2022-02-02'),
-    (2, 0.2, 2500, '2022-02-02'),
-    (3, 350, 1, '2022-02-02'),
-    (4, 1.2, 420, '2022-02-02'),
-    (10, 210, 0.11, '2022-02-02');
+    (1, 0.05, 38000.57, '2022-02-02', 'BUY'),
+    (1, 0.02, 36000.01, '2022-02-02', 'BUY'),
+    (1, 0.03, 37500, '2022-02-02', 'BUY'),
+    (2, 0.2, 3200, '2022-02-02', 'BUY'),
+    (2, 0.1, 2700, '2022-02-02', 'BUY'),
+    (2, 0.2, 2500, '2022-02-02', 'BUY'),
+    (3, 350, 1, '2022-02-02', 'BUY'),
+    (4, 1.2, 420, '2022-02-02', 'BUY'),
+    (10, 210, 0.11, '2022-02-02', 'BUY');
+
+INSERT INTO budget_transaction
+    (transaction_value, title, description, type, date)
+VALUES
+    (3000, 'Wypłata','wypłata za maj + odebranie nadgodzin' , 'INCOME', '2022-05-10'),
+    (300, 'Zakupy spożywcze','biedra' ,  'EXPENSE', '2022-05-14');

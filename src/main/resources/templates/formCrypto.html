@@ -13,25 +13,61 @@
     <div class="center">
         <div th:replace="fragments :: topHeader"></div>
         <div class="tradeHeader">
-            <h2 th:text="|${form} crypto|"></h2>
+            <h3 th:text="${form}"></h3>
+            <div class="dropdown">
+                <button onclick="myFunction()" class="dropbtn" th:text="${currentStock}"></button>
+                <div id="myDropdown" class="dropdown-content">
+                    <a th:href="|@{/}${action}${stock.symbol}|" th:each="stock: ${stocks}"
+                       th:text="|${stock.name} ${stock.symbol}|"></a>
+                </div>
+            </div>
         </div>
         <div class="tradeCenter">
             <div class="tradeTop">
-                <h5>Available funds: 1000zł ~ $232.54</h5>
-                <p id="fiatExchange">(1USD = 4.29PLN)</p>
-                <p>Choose a stock</p>
-                <select class="form-select">
-                    <option>BTC</option>
-                </select>
-                <p>Max: 0.032123</p>
+                <form method="post" th:action="@{/buyStock}" class="formBuy">
+                    <div class="headForm">
+                        <div class="availableFunds">
+                            <h2 th:text="|$*{#numbers.formatDecimal(dollarBalance, 1, 'COMMA', 2, 'POINT')}|"></h2>
+                            <p>Available funds</p>
+                        </div>
+                        <div>
+                            <h6 th:text="|PLN *{#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')} (1USD = 4.28PLN)|"></h6>
+                        </div>
+                    </div>
+                    <div class="stockAmount">
+                        <p>Amount</p>
+                        <input type="text" th:name="symbol" th:value="${symbol}" th:hidden="hidden">
+                        <input class="form-control" th:name="amount" type="number" th:step="0.000001" th:max="${maxValue}">
+                        <p th:text="|Max: *{#numbers.formatDecimal(maxValue, 1, 'COMMA', 3, 'POINT')}|"></p>
+                        <input class="form-control" disabled placeholder="Suma" id="tradeValue">
+                        <button class="btn btn-secondary" id="tradeButton">Trade</button>
+                    </div>
+                </form>
             </div>
-            <p>Amount</p>
-            <input type="number">
-            <input disabled placeholder="Suma" id="tradeValue">
-            <button class="btn btn-secondary">Trade</button>
-            <!--            <p>potwierdzenie?</p>-->
         </div>
     </div>
 </div>
+<script>
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function myFunction() {
+        document.getElementById("myDropdown").classList.toggle("show");
+    }
+
+    // Close the dropdown if the user clicks outside of it
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdown-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
+
 </body>
 </html>
