@@ -32,18 +32,6 @@ public class StockController {
         return "marketStock";
     }
 
-//    @GetMapping("buy-stock")
-//    public String buyStock(Model model) {
-//        model.addAttribute("balance", budgetTransactionService.getBalance());
-//        return "transactionForm";
-//    }
-
-    @GetMapping("find")
-    public String findStock(@RequestParam(required = false) String findStock,
-                            Model model) {
-        return "market";
-    }
-
     @GetMapping("/market")// market/2
     public String market(@RequestParam(required = false) String sort,
                          @RequestParam(required = false) String range,
@@ -59,19 +47,21 @@ public class StockController {
     }
 
     @GetMapping("/addToFavourite") // scalić te metody
-    public String addToFavourite(@RequestParam String symbol) {
+    public String addToFavourite(@RequestParam String symbol,
+                                 @RequestParam String side) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stock.setFavourite(true);
         stockService.save(stock);
-        return "redirect:/marketStock?symbol=" + symbol;
+        return "redirect:/" + side + "?symbol=" + symbol;
     }
 
     @GetMapping("/deleteFromFavourite")
-    public String deleteFromFavourite(@RequestParam String symbol) {
+    public String deleteFromFavourite(@RequestParam String symbol,
+                                      @RequestParam String side) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stock.setFavourite(false);
         stockService.save(stock);
-        return "redirect:/marketStock?symbol=" + symbol;
+        return "redirect:/" + side + "?symbol=" + symbol;
     }
 
     @GetMapping("/addToFavouriteInMarket") // scalić te metody

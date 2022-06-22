@@ -2,7 +2,6 @@ package pl.ml.wallet.stockTransaction.stock.api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-
 import java.math.BigDecimal;
 
 @Data
@@ -24,6 +23,7 @@ public class Usd {
     public BigDecimal getPrice() { return price; }
     @JsonProperty("price")
     public void setPrice(BigDecimal value) { this.price = value; }
+
 
     @JsonProperty("volume_24h")
     public BigDecimal getVolume24H() { return volume24H; }

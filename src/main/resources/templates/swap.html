@@ -12,29 +12,71 @@
     <div th:replace="fragments :: menuBar"></div>
     <div class="center">
         <div th:replace="fragments :: topHeader"></div>
+        <div class="tradeHeader">
+            <a th:href="@{/swap?from=BTC&to=ETH}"><button class="dropbtn">Exchange</button></a>
+            <a th:href="@{/swapHistory}"><button class="dropbtn">History</button></a>
+        </div>
         <div class="exchange">
-        <h3>Exchange</h3>
+<!--            <h3>Exchange</h3>-->
             <p>From</p>
-            <div class="exchangeOption">
-                <select class="form-select">
-                    <option>ETH - 0.5123</option>
-                </select>
-                <input type="number">
-            </div>
-            <p>To</p>
-            <div class="exchangeOption">
+            <form method="post" th:action="@{/swapCrypto}">
+                <input th:name="from" th:value="${sellStock.symbol}" th:hidden="hidden">
+                <input th:name="to" th:value="${buyStock.symbol}" th:hidden="hidden">
+                <input th:name="rate" th:value="${rate}" th:hidden="hidden">
+                <div class="exchangeOption">
+                    <div class="dropdown">
+                        <button onclick="myFunction()" id="dropSellSwapbtn" class="dropSwapbtn"  type="button"
+                                th:text="|${sellStock.name} ${stockAmount}|"></button>
+                        <div id="dropStockToSell" class="dropdownSwap-content">
+                            <a th:href="|swap?from=${stock.symbol}&to=${buyStock.symbol}|" th:each="stock: ${stocks}"
+                               th:text="${stock.name}"></a>
+                        </div>
+                    </div>
+                    <input class="swapInput" th:name="amount" th:step="0.000001" type="number" th:max="${stockAmount}">
+                </div>
+                <p>To</p>
 
-            <select class="form-select">
-                <option>Bitcoin BTC</option>
-            </select>
-            <input type="number" disabled>
-            </div>
+                <p id="updown"><a th:href="|swap?from=${buyStock.symbol}&to=${sellStock.symbol}|"><img
+                        src="/img/updown30.png"></a></p>
+                <div class="exchangeOption">
 
-            <p>Rate: 1 ETH = 0.0601 BTC</p>
-            <button class="btn btn-secondary">Exchange</button>
+                    <div class="dropdown">
+                        <button onclick="myFunction2()" id="dropBuySwapbtn" class="dropSwapbtn" type="button"
+                                th:text="${buyStock.name}"></button>
+                        <div id="dropStockToBuy" class="dropdownSwap-content">
+                            <a th:href="|swap?from=${sellStock.symbol}&to=${stock.symbol}|" th:each="stock: ${stocks}"
+                               th:text="${stock.name}"></a>
+                        </div>
+                    </div>
+                    <input type="number" disabled class="swapInput">
+                </div>
+                <p th:text="|Rate: 1 ${sellStock.symbol} = ${rate} ${buyStock.symbol}|">Rate: 1 ETH = 0.0601 BTC</p>
+                <button class="btn btn-secondary" type="submit">Exchange</button>
+            </form>
         </div>
     </div>
 </div>
+<script>
+    function myFunction() {
+        document.getElementById("dropStockToSell").classList.toggle("show");
+    }
 
+    function myFunction2() {
+        document.getElementById("dropStockToBuy").classList.toggle("show");
+    }
+
+    window.onclick = function (event) {
+        if (!event.target.matches('.dropSwapbtn')) {
+            var dropdowns = document.getElementsByClassName("dropdownSwap-content");
+            var i;
+            for (i = 0; i < dropdowns.length; i++) {
+                var openDropdown = dropdowns[i];
+                if (openDropdown.classList.contains('show')) {
+                    openDropdown.classList.remove('show');
+                }
+            }
+        }
+    }
+</script>
 </body>
 </html>

@@ -17,7 +17,7 @@
             <div class="dropdown">
                 <button onclick="myFunction()" class="dropbtn" th:text="${currentStock}"></button>
                 <div id="myDropdown" class="dropdown-content">
-                    <a th:href="|@{/}${action}${stock.symbol}|" th:each="stock: ${stocks}"
+                    <a th:href="|${action}?symbol=${stock.symbol}|" th:each="stock: ${stocks}"
                        th:text="|${stock.name} ${stock.symbol}|"></a>
                 </div>
             </div>
@@ -25,6 +25,7 @@
         <div class="tradeCenter">
             <div class="tradeTop">
                 <form method="post" th:action="@{/buyStock}" class="formBuy">
+                    <input th:hidden="hidden" th:value="${action}" th:name="transactionType">
                     <div class="headForm">
                         <div class="availableFunds">
                             <h2 th:text="|$*{#numbers.formatDecimal(dollarBalance, 1, 'COMMA', 2, 'POINT')}|"></h2>
@@ -38,7 +39,7 @@
                         <p>Amount</p>
                         <input type="text" th:name="symbol" th:value="${symbol}" th:hidden="hidden">
                         <input class="form-control" th:name="amount" type="number" th:step="0.000001" th:max="${maxValue}">
-                        <p th:text="|Max: *{#numbers.formatDecimal(maxValue, 1, 'COMMA', 3, 'POINT')}|"></p>
+                        <p th:text="|Max: *{#numbers.formatDecimal(maxValue, 1, 'COMMA', 6, 'POINT')}|"></p>
                         <input class="form-control" disabled placeholder="Suma" id="tradeValue">
                         <button class="btn btn-secondary" id="tradeButton">Trade</button>
                     </div>

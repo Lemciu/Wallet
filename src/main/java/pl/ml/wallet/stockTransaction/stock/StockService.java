@@ -157,6 +157,7 @@ public class StockService {
 
         StockResponseDto forObject = restTemplate.getForObject(URL, StockResponseDto.class);
         List<StockDto> data = forObject.getData();
+        System.out.println(data.get(0).getQuote().getUsd().getPrice() + " tajemnicza cena");
         data.stream().forEach(s -> {
             String name = s.getName();
             String symbol = s.getSymbol();
@@ -175,6 +176,7 @@ public class StockService {
             BigDecimal fullyDilutedMarketCap = s.getQuote().getUsd().getFullyDilutedMarketCap();
             BigDecimal volume24H = s.getQuote().getUsd().getVolume24H();
             double volumeChange24H = s.getQuote().getUsd().getVolumeChange24H();
+
             all.stream().filter(s1 -> s1.getSymbol().equals(symbol)).forEach(s2 -> {
                 s2.setName(name);
                 s2.setMaxSupply(maxSupply);
@@ -192,9 +194,8 @@ public class StockService {
                 s2.setFullyDilutedMarketCap(fullyDilutedMarketCap);
                 s2.setVolume24H(volume24H);
                 s2.setVolumeChange24H(volumeChange24H);
-                stockRepository.save(s2);
+                save(s2);
             });
-
         });
     }
 

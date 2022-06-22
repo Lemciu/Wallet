@@ -41,7 +41,7 @@
                 <tr th:each="transaction: ${transactions}" th:object="${transaction}">
                     <td th:text="*{title}"></td>
                     <td th:text="*{description}"></td>
-                    <td th:text="*{type}"></td>
+                    <td th:text="*{type.name}"></td>
                     <td th:text="|*{transactionValue} zł|"></td>
                     <td th:text="*{date}"></td>
                 </tr>

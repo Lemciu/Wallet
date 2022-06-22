@@ -74,8 +74,12 @@
     flex-direction: row;
 
 }
+#updown {
+    display: flex;
+    justify-content: center;
+}
 #accountStockValue {
-    font-size: xx-large;
+    font-size: 45px;
     margin-bottom: 0;
 }
 #amountStock p {
@@ -141,11 +145,26 @@
     margin-top: 0;
     margin-bottom: 30px;
 }
+.swapHistory {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 50px;
+    margin-right: 50px;
+    padding-left: 340px;
+    padding-right: 340px;
+    padding-top: 40px;
+    padding-bottom: 20px;
+    background-color: #444444;
+}
+.swapHistory table {
+    color: white;
+}
 .exchange {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: 40px;
+    margin-left: 50px;
     margin-right: 50px;
     padding-left: 340px;
     padding-right: 340px;
@@ -639,7 +658,6 @@
 
     justify-content: space-between;
 }
-
 .dropdown {
     position: relative;
 }
@@ -652,6 +670,11 @@
 .dropdownMenuButton {
     position: relative;
 }
+.dropdownSwap {
+    position: relative;
+}
+
+
 .dropbtn {
     background-color: #444444;
     color: white;
@@ -659,6 +682,31 @@
     font-size: x-large;
     border: none;
     cursor: pointer;
+}
+#dropSellSwapbtn {
+    background-color: #5c636a;
+    color: white;
+    padding: 6px;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 350px;
+    font-size: large;
+    border: none;
+    cursor: pointer;
+}
+#dropBuySwapbtn {
+    background-color: #5c636a;
+    color: white;
+    padding: 6px;
+    margin-top: 0;
+    margin-bottom: 0px;
+    width: 350px;
+    font-size: large;
+    border: none;
+    cursor: pointer;
+}
+.swapInput {
+    max-height: 40px;
 }
 .headForm {
 
@@ -681,6 +729,10 @@
     position: relative;
     display: inline-block;
 }
+.dropdownSwap {
+    position: relative;
+    display: inline-block;
+}
 
 .dropdown-content {
     display: none;
@@ -690,6 +742,21 @@
     overflow: auto;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+}
+.dropdownSwap-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 350px;
+    overflow: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdownSwap-content a {
+    color: black;
+    padding: 10px 16px;
+    text-decoration: none;
+    display: block;
 }
 
 .dropdown-content a {
@@ -702,3 +769,6 @@
 .dropdown a:hover {background-color: #ddd;}
 
 .show {display: block;}
+.showbe {
+    display: none;
+}

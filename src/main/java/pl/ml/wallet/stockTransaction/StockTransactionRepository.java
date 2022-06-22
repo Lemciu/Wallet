@@ -13,6 +13,8 @@ import java.util.Optional;
 
 public interface StockTransactionRepository extends JpaRepository<StockTransaction, Long> {
 
+    List<StockTransaction> findAllByType(StockTransactionType type);
+
     @Query("SELECT DISTINCT s.name AS name, s.symbol AS symbol FROM StockTransaction t JOIN Stock s ON s.id = t.stock.id")
     List<StockMarketDto> findAllOwnedStocksName();
 

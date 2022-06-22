@@ -29,49 +29,22 @@
                 <tbody>
                 <tr>
                     <td><a th:href="@{/cash}"><p>Cash</p></a></td>
-                    <td><p>PLN 1000</p></td>
-                    <td><p>34%</p></td>
+                    <td th:text="|PLN *{#numbers.formatDecimal(cash, 1, 'COMMA', 2, 'POINT')}|"></td>
+                    <td th:text="|*{#numbers.formatDecimal(cashPercent, 1, 'COMMA', 1, 'POINT')}%|"></td>
                 </tr>
                 <tr>
                     <td><p>Deposit/Savings</p></td>
-                    <td><p>PLN 1000</p></td>
-                    <td><p>34%</p></td>
+                    <td th:text="|PLN *{#numbers.formatDecimal(savings, 1, 'COMMA', 2, 'POINT')}|"></td>
+                    <td th:text="|*{#numbers.formatDecimal(savingsPercent, 1, 'COMMA', 1, 'POINT')}%|"></td>
                 </tr>
                 <tr>
-                    <td><p>Investments</p></td>
-                    <td><p>700zł ($3,222.54, +4.61%)</p></td>
-                    <td><p>22%</p></td>
+                    <td><a th:href="@{/accounts}"><p>Investments</p></a></td>
+                    <td th:text="|PLN *{#numbers.formatDecimal(investments, 2, 'COMMA', 2, 'POINT')} ( $*{#numbers.formatDecimal(investmentsInDollar, 2, 'COMMA', 2, 'POINT')} )|"><p>700zł ($3,222.54, +4.61%)</p></td>
+                    <td th:text="|*{#numbers.formatDecimal(investmentsPercent, 1, 'COMMA', 1, 'POINT')}%|"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
-<!--        <div class="mainBudget">-->
-<!--            <div class="budget">-->
-<!--                <h2 th:text="|PLN *{#numbers.formatDecimal(1000, 1, 'COMMA', 2, 'POINT')}|"></h2>-->
-<!--                <p>Cash</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="mainBudget">-->
-<!--            <div class="budget">-->
-<!--                <h2 th:text="|PLN *{#numbers.formatDecimal(700, 1, 'COMMA', 2, 'POINT')}|"></h2>-->
-<!--                <p>Savings/Deposit</p>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="mainBudget">-->
-<!--            <div class="budget">-->
-<!--                <h2 th:text="|PLN *{#numbers.formatDecimal(1000, 1, 'COMMA', 2, 'POINT')}|"></h2>-->
-<!--                <p>Investments</p>-->
-<!--            </div>-->
-<!--        </div>-->
-        <!--        <p th:text="*{balance}"></p>-->
-        <!--        <table>-->
-        <!--            <tbody>-->
-        <!--            <tr th:each="transaction: ${transactions}" th:object="${transaction}">-->
-        <!--                <td th:text="*{title}"></td>-->
-        <!--                <td th:text="*{transactionValue}"></td>-->
-        <!--            </tr>-->
-        <!--            </tbody>-->
-        <!--        </table>-->
     </div>
 </div>
 </body>
