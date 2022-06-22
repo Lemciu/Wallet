@@ -17,7 +17,6 @@
             <a th:href="@{/swapHistory}"><button class="dropbtn">History</button></a>
         </div>
         <div class="exchange">
-<!--            <h3>Exchange</h3>-->
             <p>From</p>
             <form method="post" th:action="@{/swapCrypto}">
                 <input th:name="from" th:value="${sellStock.symbol}" th:hidden="hidden">

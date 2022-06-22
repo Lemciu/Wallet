@@ -85,7 +85,15 @@ VALUES
     (15, 10, 28.8726, '2022-04-22', 'BUY'),
     (10, 850, 0.010132, '2022-04-22', 'BUY'),
     (10, 5000, 0.009645, '2022-04-22', 'BUY'),
-    (10, 2500, 0.014053, '2022-04-22', 'BUY');
+    (10, 2500, 0.014053, '2022-04-22', 'BUY'),
+    (2, 0.4, null, '2022-06-12', 'SWAP'),
+    (1, -0.05, null, '2022-06-12', 'SWAP');
+
+INSERT INTO swap_transaction
+    (bought_stock_transaction_id, sold_stock_transaction_id)
+VALUES
+    (32, 33);
+
 
 INSERT INTO budget_transaction
 (transaction_value, title, description, type, date)

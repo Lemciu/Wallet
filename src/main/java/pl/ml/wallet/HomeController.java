@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pl.ml.wallet.stockTransaction.stock.Stock;
 import pl.ml.wallet.stockTransaction.stock.StockService;
 import pl.ml.wallet.stockTransaction.StockTransactionService;
+import pl.ml.wallet.stockTransaction.stock.SwapTransactionDto;
 import pl.ml.wallet.transaction.BudgetTransactionService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -69,15 +71,14 @@ public class HomeController {
                                @RequestParam Double amount,
                                @RequestParam Double rate,
                                Model model) {
-        System.out.println(rate + " XDDD");
         stockTransactionService.swapCrypto(from, amount, to, rate);
-        return "redirect:/";
+        return "redirect:/swapHistory";
     }
 
     @GetMapping("/swapHistory")
     public String swapHistory(Model model) {
-        stockTransactionService.findAllSwapTransactions();
-//        model.addAttribute("transactions", null);
+        model.addAttribute("transactions", stockTransactionService.findAllSwapTransactions());
+//        0.1 BTC -> 0.78 ETH, 10.06.2022
         return "swapHistory";
     }
 

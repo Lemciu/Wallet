@@ -1,7 +1,6 @@
 package pl.ml.wallet.stockTransaction;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import pl.ml.wallet.transaction.TransactionType;
 import pl.ml.wallet.stockTransaction.stock.Stock;
 
 import javax.persistence.*;

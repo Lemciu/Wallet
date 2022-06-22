@@ -11,6 +11,10 @@
     <div th:replace="fragments :: menuBar"></div>
     <div class="center">
         <div th:replace="fragments :: topHeader"></div>
+        <div class="tradeHeader">
+            <a th:href="@{/swap?from=BTC&to=ETH}"><button class="dropbtn">Exchange</button></a>
+            <a th:href="@{/swapHistory}"><button class="dropbtn">History</button></a>
+        </div>
         <div class="swapHistory">
             <table class="table">
                 <thead>
@@ -20,10 +24,10 @@
                 </tr>
                 </thead>
                 <tbody>
-<!--                <tr th:each="transaction: ${transactions}" th:object="${transaction}">-->
-<!--                    <td th:text="|*{stockSoldAmount} *{stockSold} strzala *{stockBoughtAmount} *{stockBought}|"></td>-->
-<!--                    <td th:text="*{date}"></td>-->
-<!--                </tr>-->
+                <tr th:each="transaction: ${transactions}" th:object="${transaction}">
+                    <td th:text="|*{soldAmount} *{symbolSoldStock} -> *{boughtAmount} *{symbolBoughtStock}|"></td>
+                    <td th:text="*{date}"></td>
+                </tr>
                 </tbody>
             </table>
         </div>

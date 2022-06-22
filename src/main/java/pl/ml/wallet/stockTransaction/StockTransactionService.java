@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import pl.ml.wallet.stockTransaction.dto.*;
 import pl.ml.wallet.stockTransaction.stock.Stock;
 import pl.ml.wallet.stockTransaction.stock.StockService;
+import pl.ml.wallet.stockTransaction.stock.SwapTransactionDto;
+import pl.ml.wallet.stockTransaction.stock.SwapTransactionService;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketDto;
 import pl.ml.wallet.transaction.BudgetTransaction;
 import pl.ml.wallet.transaction.BudgetTransactionService;
@@ -21,17 +23,43 @@ public class StockTransactionService {
     private StockTransactionRepository stockTransactionRepository;
     private StockService stockService;
     private BudgetTransactionService budgetTransactionService;
+    private SwapTransactionService swapTransactionService;
 
-    public StockTransactionService(StockTransactionRepository stockTransactionRepository, StockService stockService, BudgetTransactionService budgetTransactionService) {
+    public StockTransactionService(StockTransactionRepository stockTransactionRepository, StockService stockService, BudgetTransactionService budgetTransactionService, SwapTransactionService swapTransactionService) {
         this.stockTransactionRepository = stockTransactionRepository;
         this.stockService = stockService;
         this.budgetTransactionService = budgetTransactionService;
+        this.swapTransactionService = swapTransactionService;
     }
 
-    public void findAllSwapTransactions() {
-        List<StockTransaction> swap = stockTransactionRepository.findAllByType(StockTransactionType.SWAP);
-        System.out.println("swap: " + swap.size());
-//        return null;
+    public List<SwapTransactionDto> findAllSwapTransactions() {
+        // to niżej pobieramy tylko po id które mamy w tej drugiej tabeli.. strumień ;]
+        List<StockTransaction> swapTransactions = stockTransactionRepository.findAllByType(StockTransactionType.SWAP);
+//        swapTransactions.stream()
+
+//        if(all != 0) ?
+        List<SwapTransaction> all = swapTransactionService.findAll();
+
+        List<SwapTransactionDto> result = all.stream().map(s -> {
+            Long boughtStockTransactionId = s.getBoughtStockTransactionId();
+            Long soldStockTransactionId = s.getSoldStockTransactionId();
+
+            StockTransaction buyTransaction = findById(boughtStockTransactionId);
+            StockTransaction sellTransaction = findById(soldStockTransactionId);
+
+//            this.symbolBoughtStock = symbolBoughtStock;
+//            this.boghtAmount = boghtAmount;
+//            this.symbolSoldStock = symbolSoldStock;
+//            this.soldAmount = soldAmount;
+//            this.date = date;
+            return new SwapTransactionDto(buyTransaction.getStock().getSymbol(), buyTransaction.getAmount().doubleValue(), sellTransaction.getStock().getSymbol(), sellTransaction.getAmount().negate().doubleValue(), sellTransaction.getDate());
+        }).collect(Collectors.toList());
+
+        return result;
+    }
+
+    public StockTransaction findById(Long id) {
+        return stockTransactionRepository.findById(id).orElseThrow();
     }
 
     public AccountProfileDto findAllTransactionToProfile(String symbol, String range) {
@@ -225,7 +253,6 @@ public class StockTransactionService {
     }
 
     public void sellCrypto(Double amount, String symbol) {
-//        to ma zwracać ilość?
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         System.out.println("sprzedajesz:" + symbol + " " + amount);
         stockTransactionRepository.save(new StockTransaction(LocalDate.now(), stock,
@@ -238,6 +265,7 @@ public class StockTransactionService {
         stockTransactionRepository.save(new StockTransaction(LocalDate.now(), stock,
                 BigDecimal.valueOf(amount), stock.getCurrentPrice(), StockTransactionType.BUY));
         budgetTransactionService.save(new BudgetTransaction(BigDecimal.valueOf(amount).multiply(stock.getCurrentPrice()).multiply(BigDecimal.valueOf(4.28)), "Buy " + stock.getSymbol(), "PLN -> " + stock.getSymbol() + " " + amount  + " ", TransactionType.EXPENSE, LocalDate.now()));
+
     }
 
     public List<StockMarketDto> findAllOwnedStockNames() {
@@ -285,9 +313,9 @@ public class StockTransactionService {
         System.out.println("Wymiana " + amount + " " + from + " na " + to);
         Stock sellStock = stockService.findBySymbol(from).orElseThrow();
         Stock buyStock = stockService.findBySymbol(to).orElseThrow();
-        stockTransactionRepository.save(new StockTransaction(LocalDate.now(), sellStock, BigDecimal.valueOf(amount).negate(), StockTransactionType.SWAP));
         BigDecimal result = BigDecimal.valueOf(rate).multiply(BigDecimal.valueOf(amount), MathContext.DECIMAL64);
-        stockTransactionRepository.save(new StockTransaction(LocalDate.now(), buyStock, result, StockTransactionType.SWAP));
-
+        StockTransaction save1 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), buyStock, result, StockTransactionType.SWAP));
+        StockTransaction save2 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), sellStock, BigDecimal.valueOf(amount).negate(), StockTransactionType.SWAP));
+        swapTransactionService.add(save1.getId(), save2.getId());
     }
 }
