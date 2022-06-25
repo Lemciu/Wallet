@@ -32,7 +32,7 @@ public class StockController {
         return "marketStock";
     }
 
-    @GetMapping("/market")// market/2
+    @GetMapping("/market")
     public String market(@RequestParam(required = false) String sort,
                          @RequestParam(required = false) String range,
                          @RequestParam(required = false) String title,

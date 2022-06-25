@@ -110,7 +110,6 @@ public class HomeController {
         model.addAttribute("currentStock", stock.getName());
         model.addAttribute("stocks",  stockService.findAllStockNames());
         model.addAttribute("form", "Buy");
-//        model.addAttribute("action", "buyCrypto?symbol=");
         model.addAttribute("action", "buyCrypto");
         BigDecimal balance = budgetTransactionService.getBalanceInPln();
         model.addAttribute("balance", balance);

@@ -8,7 +8,6 @@ import pl.ml.wallet.stockTransaction.stock.comparator.*;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketDto;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketProfileDto;
 
-import javax.persistence.Query;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
@@ -18,7 +17,7 @@ import java.util.stream.Collectors;
 public class StockService {
     // paginacje zrobić na markecie
     private StockRepository stockRepository;
-    private static final String URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=3a006fe7-4d68-4939-8b7b-d2442e3405bb&start=1&limit=60";
+    private static final String URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=3a006fe7-4d68-4939-8b7b-d2442e3405bb&start=1&limit=80";
 
     public StockService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
@@ -157,8 +156,10 @@ public class StockService {
 
         StockResponseDto forObject = restTemplate.getForObject(URL, StockResponseDto.class);
         List<StockDto> data = forObject.getData();
-        System.out.println(data.get(0).getQuote().getUsd().getPrice() + " tajemnicza cena");
         data.stream().forEach(s -> {
+
+//            if (s.getName() != null || !s.getName().equals("")) {
+
             String name = s.getName();
             String symbol = s.getSymbol();
             BigDecimal maxSupply = s.getMaxSupply();
@@ -195,7 +196,9 @@ public class StockService {
                 s2.setVolume24H(volume24H);
                 s2.setVolumeChange24H(volumeChange24H);
                 save(s2);
+
             });
+//            }
         });
     }
 

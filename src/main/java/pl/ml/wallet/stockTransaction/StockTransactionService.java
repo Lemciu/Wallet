@@ -99,10 +99,6 @@ public class StockTransactionService {
             BigDecimal buyValue = transactions.stream().map(t -> t.getAmount().multiply(t.getBuyPrice())).reduce(BigDecimal.ZERO, BigDecimal::add);
 
             BigDecimal valueChange = currentValue.subtract(buyValue);
-            System.out.println("curerntPrice: " + currentPrice);
-            System.out.println("currentValue: " + currentValue);
-            System.out.println("buyValue: " + buyValue);
-            System.out.println("valueChange: " + valueChange);
 
             BigDecimal m1 = currentValue.multiply(BigDecimal.valueOf(100));
             BigDecimal divide = m1.divide(buyValue, MathContext.DECIMAL64);
@@ -163,7 +159,7 @@ public class StockTransactionService {
             result.add(new AccountDto(list1.get(0).getName(), list1.get(0).getSymbol(), sumOfAmount,
                     list1.get(0).getCurrentPrice().multiply(sumOfAmount), list1.get(0).getPercentChange()));
         });
-
+        result.sort(new ValueComparator());
         return result;
     }
 
@@ -314,8 +310,8 @@ public class StockTransactionService {
         Stock sellStock = stockService.findBySymbol(from).orElseThrow();
         Stock buyStock = stockService.findBySymbol(to).orElseThrow();
         BigDecimal result = BigDecimal.valueOf(rate).multiply(BigDecimal.valueOf(amount), MathContext.DECIMAL64);
-        StockTransaction save1 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), buyStock, result, StockTransactionType.SWAP));
-        StockTransaction save2 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), sellStock, BigDecimal.valueOf(amount).negate(), StockTransactionType.SWAP));
+        StockTransaction save1 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), buyStock, result, buyStock.getCurrentPrice(), StockTransactionType.SWAP));
+        StockTransaction save2 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), sellStock, BigDecimal.valueOf(amount).negate(), sellStock.getCurrentPrice(), StockTransactionType.SWAP));
         swapTransactionService.add(save1.getId(), save2.getId());
     }
 }
