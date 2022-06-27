@@ -5,26 +5,19 @@
     <title>Fragmenty</title>
 </head>
 <body>
-<div class="menu" th:fragment="menu">
-    <ul class="menulist">
-        <a class="navbarOption" th:href="@{/}">Dashboard</a>
-        <a class="navbarOption" th:href="@{/market}">Market</a>
-        <a class="navbarOption" th:href="@{/savings}">Savings</a>
-        <a class="navbarOption" th:href="@{/investments}">Investments</a>
-        <a class="navbarOption" th:href="@{/notifications}">Notification</a>
-    </ul>
-</div>
 <div class="menuBar" th:fragment="menuBar">
     <ul class="menuList">
         <p id="menuTitle">MENU</p>
-        <a class="btn btn-secondary" th:href="@{/}">Portfolio</a>
+        <a class="btn btn-secondary" th:href="@{/}">Dashboard</a>
+        <a class="btn btn-secondary" th:href="@{/cashWallet}">Cash Wallet</a>
+        <a class="btn btn-secondary" th:href="@{/cryptoWallet}">Crypto Wallet</a>
+<!--        <a class="btn btn-secondary" th:href="@{/crypto}">Crypto</a>-->
         <a class="btn btn-secondary" th:href="@{/market}">Market</a>
-        <a class="btn btn-secondary" th:href="@{/accounts}">Accounts</a>
+<!--        <a class="btn btn-secondary" th:href="@{/accounts}">Accounts</a>-->
         <a class="btn btn-secondary" th:href="@{/buyCrypto?symbol=BTC}">Buy</a>
         <a class="btn btn-secondary" th:href="@{/sellCrypto?symbol=BTC}">Sell</a>
         <a class="btn btn-secondary" th:href="@{/swap?from=BTC&to=ETH}">Swap</a>
-        <a class="btn btn-secondary" th:href="@{/budget}">Budget</a>
-        <a class="btn btn-secondary" th:href="@{/}">Notification</a>
+<!--        <a class="btn btn-secondary" th:href="@{/}">Notification</a>-->
     </ul>
 </div>
 <div class="topHeader"  th:fragment="topHeader">

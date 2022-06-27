@@ -4,7 +4,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.ml.wallet.stockTransaction.stock.Stock;
 import pl.ml.wallet.stockTransaction.stock.StockService;
 
 @Controller
@@ -30,9 +29,6 @@ public class StockTransactionController {
                                @RequestParam (required = false) String range,
                                 Model model) {
         model.addAttribute("stock", stockTransactionService.findAllTransactionToProfile(symbol, range));
-//        model.addAttribute("percentageProfit", stockTransactionService.getPercentageProfit(range));
-//        model.addAttribute("profit", stockTransactionService.getProfit(range));
-//        stockname,symbol,currentprice, amount, amountValue, percentChange, latestTransaction(btc -> ADA, ilość +/- tego na której stronie jesteśmy)
         return "accountStock";
     }
 }

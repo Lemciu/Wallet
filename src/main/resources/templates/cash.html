@@ -19,8 +19,32 @@
                     <p>total balance</p>
                 </div>
                 <div class="headButtons">
-                    <button class="btn btn-secondary"><img src="/img/plus24.png"></button>
-                    <!--                    to będzie się wysuwać?-->
+                    <a th:href="@{/addTransaction}"><button class="btn btn-secondary"><img src="/img/plus24.png"></button></a>
+                </div>
+            </div>
+            <div class="portfolioStats">
+                <div class="portfolioProfit">
+                    <p th:if="${percentageProfit >= 0}"><img src="/img/upgreen24.png"></p>
+                    <p th:if="${percentageProfit >= 0}" id="portfolioPlusProfit"
+                       th:text="|${percentageProfit}% (+$${profit})|"></p>
+
+                    <p th:unless="${percentageProfit >= 0}"><img src="/img/downred24.png"></p>
+                    <p th:unless="${percentageProfit >= 0}" id="portfolioMinusProfit"
+                       th:text="|${percentageProfit}% ($${profit})|"></p>
+                </div>
+                <div class="changeRangeButtons">
+                    <a th:href="@{/cryptoWallet?range=1h}">
+                        <button type="button" class="btn btn-secondary">1h</button></a>
+                    <a th:href="@{/cryptoWallet}">
+                        <button type="button" class="btn btn-secondary">1D</button></a>
+                    <a th:href="@{/cryptoWallet?range=1W}">
+                        <button type="button" class="btn btn-secondary">1W</button></a>
+                    <a th:href="@{/cryptoWallet?range=1M}">
+                        <button type="button" class="btn btn-secondary">1M</button></a>
+                    <a th:href="@{/cryptoWallet?range=3M}">
+                        <button type="button" class="btn btn-secondary">3M</button></a>
+                    <a th:href="@{/cryptoWallet?range=max}">
+                        <button type="button" class="btn btn-secondary">All</button></a>
                 </div>
             </div>
         </div>

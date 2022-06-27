@@ -1,7 +1,6 @@
 package pl.ml.wallet.transaction;
 
 import org.springframework.stereotype.Service;
-import pl.ml.wallet.stockTransaction.StockTransactionService;
 import pl.ml.wallet.stockTransaction.stock.Stock;
 import pl.ml.wallet.stockTransaction.stock.StockService;
 
@@ -15,7 +14,6 @@ import java.util.stream.Collectors;
 public class BudgetTransactionService {
     private BudgetTransactionRepository budgetTransactionRepository;
     private StockService stockService;
-//    private StockTransactionService stockTransactionService;
 
     public BudgetTransactionService(BudgetTransactionRepository budgetTransactionRepository, StockService stockService) {
         this.budgetTransactionRepository = budgetTransactionRepository;
@@ -23,7 +21,9 @@ public class BudgetTransactionService {
     }
 
     public List<BudgetTransaction> findAll() {
-        return budgetTransactionRepository.findAll();
+        List<BudgetTransaction> result = budgetTransactionRepository.findAll();
+        result.sort(new BudgetDateComparator());
+        return result;
     }
 
     public BigDecimal getBalanceInPln() {
@@ -45,15 +45,8 @@ public class BudgetTransactionService {
         budgetTransactionRepository.save(budgetTransaction);
     }
 
-    public BigDecimal getAmount(Stock stock) {
-        return null;
-    }
-
     public BigDecimal getSavingsAmount() {
         return BigDecimal.valueOf(15762);
     }
 
-//    public BigDecimal getTotalBalance() {
-//        return getBalance().add(getSavingsAmount()).add(stockTransactionService.getTotalBalance());
-//    }
 }

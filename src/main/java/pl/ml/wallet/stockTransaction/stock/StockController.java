@@ -46,7 +46,7 @@ public class StockController {
 
     }
 
-    @GetMapping("/addToFavourite") // scalić te metody
+    @GetMapping("/addToFavourite")
     public String addToFavourite(@RequestParam String symbol,
                                  @RequestParam String side) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
@@ -69,11 +69,6 @@ public class StockController {
                                          @RequestParam String symbol,
                                          @RequestParam(required = false) String range,
                                          @RequestParam(required = false) String title) {
-        System.out.println("Add:");
-        System.out.println("symbol: " + symbol);
-        System.out.println("range: " + range);
-        System.out.println("title: " + title);
-        ////////////////////////////////
         model.addAttribute("title", title);
         model.addAttribute("range", range);
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
@@ -98,11 +93,6 @@ public class StockController {
                                               @RequestParam String symbol,
                                               @RequestParam(required = false) String range,
                                               @RequestParam(required = false) String title) {
-        System.out.println("Delete:");
-        System.out.println("symbol: " + symbol);
-        System.out.println("range: " + range);
-        System.out.println("title: " + title);
-        ////////////////////////////////
         model.addAttribute("title", title);
         model.addAttribute("range", range);
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();

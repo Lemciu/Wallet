@@ -74,15 +74,6 @@ VALUES
     (4, 0.25, 376.456, '2022-04-22', 'BUY'),
     (4, 0.25, 376.534, '2022-04-22', 'BUY'),
     (4, 0.4, 364.1908, '2022-04-22', 'BUY'),
-    (19, 300, 0.513, '2022-04-22', 'BUY'),
-    (19, 500, 0.438, '2022-04-22', 'BUY'),
-    (19, 100, 0.4765, '2022-04-22', 'BUY'),
-    (9, 10, 61.67, '2022-04-22', 'BUY'),
-    (9, 10, 65.1341, '2022-04-22', 'BUY'),
-    (9, 5, 57.653, '2022-04-22', 'BUY'),
-    (15, 13, 31.523, '2022-04-22', 'BUY'),
-    (15, 12, 27.5135, '2022-04-22', 'BUY'),
-    (15, 10, 28.8726, '2022-04-22', 'BUY'),
     (10, 850, 0.010132, '2022-04-22', 'BUY'),
     (10, 5000, 0.009645, '2022-04-22', 'BUY'),
     (10, 2500, 0.014053, '2022-04-22', 'BUY'),
@@ -92,7 +83,7 @@ VALUES
 INSERT INTO swap_transaction
     (bought_stock_transaction_id, sold_stock_transaction_id)
 VALUES
-    (32, 33);
+    (23, 24);
 
 
 INSERT INTO budget_transaction
@@ -100,4 +91,7 @@ INSERT INTO budget_transaction
 VALUES
     (15000, 'Sprzedaż auta','Sprzedanie starego samochodu' , 'INCOME', '2022-03-13'),
     (3000, 'Wypłata','wypłata za maj + odebranie nadgodzin' , 'INCOME', '2022-05-10'),
-    (300, 'Zakupy spożywcze','biedra' ,  'EXPENSE', '2022-05-14');
+    (3000, 'Wypłata','wypłata za kwiecień' , 'INCOME', '2022-04-10'),
+    (214, 'Zakupy spożywcze','biedra' ,  'EXPENSE', '2022-06-02'),
+    (150, 'Prezent dla Wojtka','Zdalnie sterowany samochodzik' ,  'EXPENSE', '2022-04-07'),
+    (410, 'Paliwo','400zł za bak... co za czasy' ,  'EXPENSE', '2022-04-28');

@@ -25,8 +25,8 @@
             </div>
             <div class="accountHeaderButtons">
                 <a th:href="@{/buyCrypto(symbol=${stock.symbol})}"><button class="btn btn-secondary">Buy</button></a>
-                <button class="btn btn-secondary">Swap</button>
                 <a th:href="@{/sellCrypto(symbol=${stock.symbol})}"><button class="btn btn-secondary">Sell</button></a>
+                <a th:href="@{/swap(from=${stock.symbol}, to=ETH)}"><button class="btn btn-secondary">Swap</button></a>
             </div>
         </div>
         <div class="accountStockPrice">

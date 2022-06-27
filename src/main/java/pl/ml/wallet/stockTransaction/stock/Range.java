@@ -6,11 +6,16 @@ public enum Range {
     ONE_WEEK("1W"),
     ONE_MONTH("1M"),
     TWO_MONTH("2M"),
-    THREE_MONTH("3M");
+    THREE_MONTH("3M"),
+    MAX("Max");
 
     private String name;
 
     Range(String name) {
         this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Accounts</title>
+    <link rel="stylesheet" th:href="style2.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div class="content">
+    <div th:replace="fragments :: menuBar"></div>
+    <div class="center">
+        <div th:replace="fragments :: topHeader"></div>
+        <div class="accountHead">
+            <div class="mainCenter">
+                <div class="headCenter">
+                    <div class="totalBalance">
+                        <h2 th:text="|$ *{#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')}|"></h2>
+                        <p>total balance</p>
+                    </div>
+                    <div class="headButtons">
+                        <a th:href="@{/buyCrypto?symbol=BTC}">
+                            <button type="button" class="btn btn-secondary">Buy</button></a>
+                        <a th:href="@{/sellCrypto?symbol=BTC}">
+                            <button type="button" class="btn btn-secondary">Sell</button></a>
+                        <a th:href="@{/sellCrypto?symbol=BTC}">
+                            <button type="button" class="btn btn-secondary">Swap</button></a>
+                    </div>
+                </div>
+                <div class="portfolioStats">
+                    <div class="portfolioProfit">
+                        <p th:if="${percentageProfit >= 0}"><img src="/img/upgreen24.png"></p>
+                        <p th:if="${percentageProfit >= 0}" id="portfolioPlusProfit"
+                           th:text="|${percentageProfit}% (+$${profit})|"></p>
+
+                        <p th:unless="${percentageProfit >= 0}"><img src="/img/downred24.png"></p>
+                        <p th:unless="${percentageProfit >= 0}" id="portfolioMinusProfit"
+                           th:text="|${percentageProfit}% ($${profit})|"></p>
+                    </div>
+                    <div class="changeRangeButtons">
+                        <a th:href="@{/cryptoWallet?range=1h}">
+                            <button type="button" class="btn btn-secondary">1h</button></a>
+                        <a th:href="@{/cryptoWallet}">
+                            <button type="button" class="btn btn-secondary">1D</button></a>
+                        <a th:href="@{/cryptoWallet?range=1W}">
+                            <button type="button" class="btn btn-secondary">1W</button></a>
+                        <a th:href="@{/cryptoWallet?range=1M}">
+                            <button type="button" class="btn btn-secondary">1M</button></a>
+                        <a th:href="@{/cryptoWallet?range=3M}">
+                            <button type="button" class="btn btn-secondary">3M</button></a>
+                        <a th:href="@{/cryptoWallet?range=max}">
+                            <button type="button" class="btn btn-secondary">All</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+<!--        <div class="accountBar">-->
+<!--            <div class="searchBar">-->
+<!--                <input type="search" class="form-control" id="searchMarketBar" th:placeholder="Search"/>-->
+<!--                <button class="btn btn-secondary" type="submit"><img src="/img/whitemagnifier30.png"></button>-->
+<!--            </div>-->
+<!--            <div class="rangeMarket">-->
+<!--                <div>-->
+<!--                    <a th:href="@{/cryptoWallet?range=1h}">-->
+<!--                        <button type="button" class="btn btn-secondary">1h</button></a>-->
+<!--                    <a th:href="@{/cryptoWallet}">-->
+<!--                        <button type="button" class="btn btn-secondary">1D</button></a>-->
+<!--                    <a th:href="@{/cryptoWallet?range=1W}">-->
+<!--                        <button type="button" class="btn btn-secondary">1W</button></a>-->
+<!--                    <a th:href="@{/cryptoWallet?range=1M}">-->
+<!--                        <button type="button" class="btn btn-secondary">1M</button></a>-->
+<!--                    <a th:href="@{/cryptoWallet?range=3M}">-->
+<!--                        <button type="button" class="btn btn-secondary">3M</button></a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+        <div class="mainAccounts">
+            <table class="table" id="accountsTable">
+                <tbody>
+                <tr th:each="account: ${accounts}" th:object="${account}">
+                    <td><a th:href="@{/accountStock(symbol=*{symbol})}" th:text="*{name}"></a></td>
+                    <td><a href="#" th:text="|*{amount} *{symbol}|"></a></td>
+                    <td><a href="#" th:text="|$*{#numbers.formatDecimal(value, 1, 'COMMA', 2, 'POINT')}|"></a></td>
+                    <td th:if="*{percentChange >= 0}" class="justRow">
+                        <p><img src="/img/upgreen24.png"></p>
+                        <p class="greenFont"
+                           th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                    </td>
+                    <td th:unless="*{percentChange >= 0}" class="justRow">
+                        <p><img src="/img/downred24.png"></p>
+                        <p class="redFont"
+                           th:text="|*{#numbers.formatDecimal(percentChange, 1, 'COMMA', 2, 'POINT')}%|"></p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

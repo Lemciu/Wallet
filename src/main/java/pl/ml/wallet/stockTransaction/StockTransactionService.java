@@ -2,10 +2,8 @@ package pl.ml.wallet.stockTransaction;
 
 import org.springframework.stereotype.Service;
 import pl.ml.wallet.stockTransaction.dto.*;
-import pl.ml.wallet.stockTransaction.stock.Stock;
-import pl.ml.wallet.stockTransaction.stock.StockService;
-import pl.ml.wallet.stockTransaction.stock.SwapTransactionDto;
-import pl.ml.wallet.stockTransaction.stock.SwapTransactionService;
+import pl.ml.wallet.stockTransaction.stock.*;
+import pl.ml.wallet.stockTransaction.stock.comparator.SwapDateComparator;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketDto;
 import pl.ml.wallet.transaction.BudgetTransaction;
 import pl.ml.wallet.transaction.BudgetTransactionService;
@@ -33,32 +31,28 @@ public class StockTransactionService {
     }
 
     public List<SwapTransactionDto> findAllSwapTransactions() {
-        // to niżej pobieramy tylko po id które mamy w tej drugiej tabeli.. strumień ;]
-        List<StockTransaction> swapTransactions = stockTransactionRepository.findAllByType(StockTransactionType.SWAP);
-//        swapTransactions.stream()
-
-//        if(all != 0) ?
         List<SwapTransaction> all = swapTransactionService.findAll();
 
         List<SwapTransactionDto> result = all.stream().map(s -> {
             Long boughtStockTransactionId = s.getBoughtStockTransactionId();
             Long soldStockTransactionId = s.getSoldStockTransactionId();
-
             StockTransaction buyTransaction = findById(boughtStockTransactionId);
             StockTransaction sellTransaction = findById(soldStockTransactionId);
 
-//            this.symbolBoughtStock = symbolBoughtStock;
-//            this.boghtAmount = boghtAmount;
-//            this.symbolSoldStock = symbolSoldStock;
-//            this.soldAmount = soldAmount;
-//            this.date = date;
-            return new SwapTransactionDto(buyTransaction.getStock().getSymbol(), buyTransaction.getAmount().doubleValue(), sellTransaction.getStock().getSymbol(), sellTransaction.getAmount().negate().doubleValue(), sellTransaction.getDate());
+            return new SwapTransactionDto(buyTransaction.getStock().getSymbol(),
+                    buyTransaction.getAmount().doubleValue(), sellTransaction.getStock().getSymbol(),
+                    sellTransaction.getAmount().negate().doubleValue(), sellTransaction.getDate());
         }).collect(Collectors.toList());
-
+        result.sort(new SwapDateComparator());
         return result;
     }
 
     public StockTransaction findById(Long id) {
+        if (stockTransactionRepository.findById(id).isPresent()) {
+            System.out.println("asd");
+        } else {
+            System.out.println("as123d");
+        }
         return stockTransactionRepository.findById(id).orElseThrow();
     }
 
@@ -117,13 +111,13 @@ public class StockTransactionService {
             BigDecimal valueChange = value.multiply(BigDecimal.valueOf(transactions.get(0).getPercentChange())).divide(BigDecimal.valueOf(100), MathContext.DECIMAL64);
 
             return new AccountProfileDto(transactions.get(0).getName(), transactions.get(0).getSymbol(), amount,
-                        amount.multiply(currentPrice), transactions.get(0).getPercentChange(), valueChange, transactions.get(0).getFavourite(), currentPrice);
+                    amount.multiply(currentPrice), transactions.get(0).getPercentChange(), valueChange, transactions.get(0).getFavourite(), currentPrice);
 
         }
 
     }
 
-    private  List<TransactionOwnedDto> getDtoWithAllChange(String symbol) {
+    private List<TransactionOwnedDto> getDtoWithAllChange(String symbol) {
         return stockTransactionRepository.findAllTransactionToProfileWithAllChange(symbol);
     }
 
@@ -163,19 +157,19 @@ public class StockTransactionService {
         return result;
     }
 
-    public BigDecimal getTotalBalance() {
-        List<TransactionBalanceDto> allStocks = stockTransactionRepository.findAllToGetTotalBalance();
-        return allStocks.stream().map(t -> {
-            BigDecimal currentPrice = t.getCurrentPrice();
-            BigDecimal amount = t.getAmount();
-            return currentPrice.multiply(amount);
-        }).reduce(BigDecimal.ZERO, BigDecimal::add);
+    public BigDecimal getCryptoBalance() {
+        return stockTransactionRepository.findAllToGetTotalBalance()
+                .stream()
+                .map(this::getValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private BigDecimal getValue(TransactionBalanceDto transaction) {
+        return transaction.getCurrentPrice().multiply(transaction.getAmount());
     }
 
     public BigDecimal getPercentageProfit(String range) {
-        BigDecimal multiply = getProfit(range).multiply(BigDecimal.valueOf(100));
-        BigDecimal totalBalance = getTotalBalance();
-        return multiply.divide(totalBalance, RoundingMode.HALF_UP);
+        return getProfit(range).multiply(BigDecimal.valueOf(100)).divide(getCryptoBalance(), RoundingMode.HALF_UP);
     }
 
     public BigDecimal getProfitAccount(String range) {
@@ -227,41 +221,38 @@ public class StockTransactionService {
 
     private BigDecimal getFinalProfitOfStock(List<TransactionProfitDto> transactions) {
         return transactions.stream().map(t -> {
-            BigDecimal amount = t.getAmount();
-            BigDecimal currentPrice = t.getCurrentPrice();
-            BigDecimal buyPrice = t.getBuyPrice();
-            BigDecimal value = amount.multiply(currentPrice);
-            BigDecimal buyValue = amount.multiply(buyPrice);
+            BigDecimal value = t.getAmount().multiply(t.getCurrentPrice());
+            BigDecimal buyValue = t.getAmount().multiply(t.getBuyPrice());
             return value.subtract(buyValue);
         }).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     private BigDecimal getProfitOfStock(List<TransactionProfitDto> transactions) {
         return transactions.stream().map(t -> {
-            BigDecimal amount = t.getAmount();
-            BigDecimal currentPrice = t.getCurrentPrice();
-            BigDecimal percentChange = t.getPercentChange();
-            BigDecimal value = amount.multiply(currentPrice);
-            BigDecimal result = value.multiply(percentChange);
-            BigDecimal divide = result.divide(BigDecimal.valueOf(100));
-            return divide;
+            BigDecimal value = t.getAmount().multiply(t.getCurrentPrice());
+            BigDecimal valueChange = value.multiply(t.getPercentChange());
+            return valueChange.divide(BigDecimal.valueOf(100));
         }).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void sellCrypto(Double amount, String symbol) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
-        System.out.println("sprzedajesz:" + symbol + " " + amount);
         stockTransactionRepository.save(new StockTransaction(LocalDate.now(), stock,
                 BigDecimal.valueOf(amount).negate(), stock.getCurrentPrice(), StockTransactionType.SELL));
-        budgetTransactionService.save(new BudgetTransaction(BigDecimal.valueOf(amount).multiply(stock.getCurrentPrice()).multiply(BigDecimal.valueOf(4.28)).negate(), "Sell " + stock.getSymbol(), "PLN -> " + stock.getSymbol() + " " + amount  + " ", TransactionType.EXPENSE, LocalDate.now()));
+        budgetTransactionService.save(new BudgetTransaction(
+                BigDecimal.valueOf(amount).multiply(stock.getCurrentPrice()).multiply(BigDecimal.valueOf(4.28)),
+                "Sell " + stock.getSymbol(), amount + " " + stock.getSymbol() + " -> PLN" ,
+                TransactionType.INCOME, LocalDate.now()));
     }
 
     public void buyCrypto(Double amount, String symbol) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stockTransactionRepository.save(new StockTransaction(LocalDate.now(), stock,
                 BigDecimal.valueOf(amount), stock.getCurrentPrice(), StockTransactionType.BUY));
-        budgetTransactionService.save(new BudgetTransaction(BigDecimal.valueOf(amount).multiply(stock.getCurrentPrice()).multiply(BigDecimal.valueOf(4.28)), "Buy " + stock.getSymbol(), "PLN -> " + stock.getSymbol() + " " + amount  + " ", TransactionType.EXPENSE, LocalDate.now()));
-
+        budgetTransactionService.save(new BudgetTransaction(
+                BigDecimal.valueOf(amount).multiply(stock.getCurrentPrice()).multiply(BigDecimal.valueOf(4.28)),
+                "Buy " + stock.getSymbol(), "PLN -> " + stock.getSymbol() + " " + amount + " ",
+                TransactionType.EXPENSE, LocalDate.now()));
     }
 
     public List<StockMarketDto> findAllOwnedStockNames() {
@@ -274,27 +265,27 @@ public class StockTransactionService {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public BigDecimal getTotalBalanceA() {
-        BigDecimal cash = budgetTransactionService.getBalanceInPln();// cash
-        BigDecimal investments = getTotalBalance().multiply(BigDecimal.valueOf(4.28));// inwestycja
+    public BigDecimal getTotalBalance() {
+        BigDecimal cash = budgetTransactionService.getBalanceInPln();
+        BigDecimal investments = getCryptoBalance().multiply(BigDecimal.valueOf(4.28));
         BigDecimal savings = budgetTransactionService.getSavingsAmount();
         return investments.add(cash).add(savings);
     }
 
     public BigDecimal getBalanceInPercent() {
-        BigDecimal hundretPercent = getTotalBalanceA();
+        BigDecimal hundretPercent = getTotalBalance();
         BigDecimal x = budgetTransactionService.getBalanceInPln();
         return x.multiply(BigDecimal.valueOf(100)).divide(hundretPercent, MathContext.DECIMAL64);
     }
 
     public BigDecimal getInvestmentsInPercent() {
-        BigDecimal hundretPercent = getTotalBalanceA();
-        BigDecimal x = getTotalBalance().multiply(BigDecimal.valueOf(4.28));
+        BigDecimal hundretPercent = getTotalBalance();
+        BigDecimal x = getCryptoBalance().multiply(BigDecimal.valueOf(4.28));
         return x.multiply(BigDecimal.valueOf(100)).divide(hundretPercent, MathContext.DECIMAL64);
     }
 
     public BigDecimal getSavingsInPercent() {
-        BigDecimal hundretPercent = getTotalBalanceA();
+        BigDecimal hundretPercent = getTotalBalance();
         BigDecimal x = budgetTransactionService.getSavingsAmount();
         return x.multiply(BigDecimal.valueOf(100)).divide(hundretPercent, MathContext.DECIMAL64);
     }
@@ -306,7 +297,6 @@ public class StockTransactionService {
     }
 
     public void swapCrypto(String from, Double amount, String to, Double rate) {
-        System.out.println("Wymiana " + amount + " " + from + " na " + to);
         Stock sellStock = stockService.findBySymbol(from).orElseThrow();
         Stock buyStock = stockService.findBySymbol(to).orElseThrow();
         BigDecimal result = BigDecimal.valueOf(rate).multiply(BigDecimal.valueOf(amount), MathContext.DECIMAL64);
