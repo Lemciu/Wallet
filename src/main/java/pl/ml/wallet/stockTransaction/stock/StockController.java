@@ -3,11 +3,9 @@ package pl.ml.wallet.stockTransaction.stock;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketDto;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketProfileDto;
-import pl.ml.wallet.transaction.BudgetTransactionService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,11 +13,9 @@ import java.util.stream.Collectors;
 @Controller
 public class StockController {
     private StockService stockService;
-    private BudgetTransactionService budgetTransactionService;
 
-    public StockController(StockService stockService, BudgetTransactionService budgetTransactionService) {
+    public StockController(StockService stockService) {
         this.stockService = stockService;
-        this.budgetTransactionService = budgetTransactionService;
     }
 
     @GetMapping("/marketStock")
@@ -33,10 +29,8 @@ public class StockController {
     }
 
     @GetMapping("/market")
-    public String market(@RequestParam(required = false) String sort,
-                         @RequestParam(required = false) String range,
+    public String market(@RequestParam(required = false) String range,
                          @RequestParam(required = false) String title,
-                         @PathVariable(required = false) String page,
                          Model model) {
         model.addAttribute("title", title);
         model.addAttribute("range", range);
@@ -64,28 +58,24 @@ public class StockController {
         return "redirect:/" + side + "?symbol=" + symbol;
     }
 
-    @GetMapping("/addToFavouriteInMarket") // scalić te metody
+    @GetMapping("/addToFavouriteInMarket")
     public String addToFavouriteInMarket(Model model,
                                          @RequestParam String symbol,
                                          @RequestParam(required = false) String range,
                                          @RequestParam(required = false) String title) {
-        model.addAttribute("title", title);
-        model.addAttribute("range", range);
+        model.addAttribute("title", stockService.getTitle(title));
+        model.addAttribute("range", stockService.getRange(range));
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stock.setFavourite(true);
         stockService.save(stock);
-        if (title == null) {
-            title = "";
-        }
-        if (range == null) {
-            range = "";
-        }
+
         if (!range.equals("")) {
             return "redirect:/market?title=" + title + "&range=" + range;
         }
         else {
             return "redirect:/market?title=" + title;
         }
+
     }
 
     @GetMapping("/deleteFromFavouriteInMarket")
@@ -93,24 +83,20 @@ public class StockController {
                                               @RequestParam String symbol,
                                               @RequestParam(required = false) String range,
                                               @RequestParam(required = false) String title) {
-        model.addAttribute("title", title);
-        model.addAttribute("range", range);
+        model.addAttribute("title", stockService.getTitle(title));
+        model.addAttribute("range", stockService.getRange(range));
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stock.setFavourite(false);
         stockService.save(stock);
 
-        if (title == null) {
-            title = "";
-        }
-        if (range == null) {
-            range = "";
-        }
+
         if (!range.equals("")) {
             return "redirect:/market?title=" + title + "&range=" + range;
         }
         else {
             return "redirect:/market?title=" + title;
         }
+
     }
 
 }

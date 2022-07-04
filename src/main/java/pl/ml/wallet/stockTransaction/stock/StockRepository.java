@@ -16,11 +16,9 @@ public interface StockRepository extends JpaRepository<Stock, Long> {
 
     Optional<Stock> findBySymbol(String symbol);
 
-    @Query("SELECT name AS name, currentPrice AS currentPrice, percentChange24H AS percentChange FROM Stock " +
+    @Query("SELECT name AS name, currentPrice AS currentPrice,symbol AS symbol, percentChange24H AS percentChange FROM Stock " +
             "WHERE favourite = true")
     List<StockMarketDto> findAllByFavouriteIsTrue();
-
-    List<Stock> findByNameContainingIgnoreCase(String name);
 
     @Query("SELECT id AS id, name AS name, symbol AS symbol, currentPrice AS currentPrice, marketCap AS marketCap, percentChange1H AS percentChange, favourite AS favourite " +
             "FROM Stock")

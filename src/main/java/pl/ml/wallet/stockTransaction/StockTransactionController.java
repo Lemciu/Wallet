@@ -17,8 +17,8 @@ public class StockTransactionController {
     }
 
     @GetMapping("/accounts")
-    public String accounts(@RequestParam (required = false) String range,
-            Model model) {
+    public String accounts(@RequestParam(required = false) String range,
+                           Model model) {
         model.addAttribute("accounts",
                 stockTransactionService.toAccountDto(stockTransactionService.findAllOwnedAccounts(range)));
         return "accounts";
@@ -26,9 +26,24 @@ public class StockTransactionController {
 
     @GetMapping("/accountStock")
     public String accountStock(@RequestParam String symbol,
-                               @RequestParam (required = false) String range,
-                                Model model) {
+                               @RequestParam(required = false) String range,
+                               @RequestParam(required = false) String type,
+                               @RequestParam(required = false) String secondType,
+                               Model model) {
+        model.addAttribute("range", stockService.getRange(range));
+        if (secondType == null) {
+            secondType = "All";
+        }
+        if (type == null) {
+            type = "All";
+        }
+
+        model.addAttribute("secondType", secondType);
+        model.addAttribute("type", type);
         model.addAttribute("stock", stockTransactionService.findAllTransactionToProfile(symbol, range));
+        model.addAttribute("transactions",
+                stockTransactionService.findAllTransactionsByStock(stockService.findBySymbol(symbol).get().getId(), type, secondType));
+
         return "accountStock";
     }
 }

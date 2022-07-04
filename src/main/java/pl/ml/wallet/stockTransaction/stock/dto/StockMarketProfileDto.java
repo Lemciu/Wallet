@@ -11,7 +11,7 @@ public class StockMarketProfileDto {
     private Double marketCapDominance;
     private BigDecimal fullyDilutedMarketCap;
     private Double percentChange;
-    private Double percentChange1H; //do wywalenia później, jeśli comparatory pozwolą
+    private Double percentChange1H;
     private Double percentChange24H;
     private Double percentChange7D;
     private Double percentChange30D;
@@ -25,16 +25,6 @@ public class StockMarketProfileDto {
     private BigDecimal circulatingSupply;
 
     public StockMarketProfileDto() {
-    }
-
-    public StockMarketProfileDto(Long id, String name, String symbol, BigDecimal currentPrice, BigDecimal marketCap, Double percentChange, boolean favourite) {
-        this.id = id;
-        this.name = name;
-        this.symbol = symbol;
-        this.currentPrice = currentPrice;
-        this.marketCap = marketCap;
-        this.percentChange = percentChange;
-        this.favourite = favourite;
     }
 
     public Long getId() {

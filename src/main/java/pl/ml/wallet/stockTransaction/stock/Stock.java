@@ -180,28 +180,4 @@ public class Stock {
         this.circulatingSupply = circulatingSupply;
     }
 
-    @Override
-    public String toString() {
-        return "Stock{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", symbol='" + symbol + '\'' +
-                ", currentPrice=" + currentPrice +
-                ", marketCap=" + marketCap +
-                ", marketCapDominance=" + marketCapDominance +
-                ", fullyDilutedMarketCap=" + fullyDilutedMarketCap +
-                ", percentChange1H=" + percentChange1H +
-                ", percentChange24H=" + percentChange24H +
-                ", percentChange7D=" + percentChange7D +
-                ", percentChange30D=" + percentChange30D +
-                ", percentChange60D=" + percentChange60D +
-                ", percentChange90D=" + percentChange90D +
-                ", volume24H=" + volume24H +
-                ", volumeChange24H=" + volumeChange24H +
-                ", favourite=" + favourite +
-                ", maxSupply=" + maxSupply +
-                ", totalSupply=" + totalSupply +
-                ", circulatingSupply=" + circulatingSupply +
-                '}';
-    }
 }

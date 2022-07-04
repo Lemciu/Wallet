@@ -31,13 +31,6 @@ public class StockTransaction {
         this.type = type;
     }
 
-    public StockTransaction(LocalDate date, Stock stock, BigDecimal amount, StockTransactionType type) {
-        this.date = date;
-        this.stock = stock;
-        this.amount = amount;
-        this.type = type;
-    }
-
     public StockTransaction() {
     }
 

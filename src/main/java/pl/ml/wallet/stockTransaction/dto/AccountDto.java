@@ -2,7 +2,6 @@ package pl.ml.wallet.stockTransaction.dto;
 
 import java.math.BigDecimal;
 
-// te dto połączyć później
 public class AccountDto {
 
     private String name;

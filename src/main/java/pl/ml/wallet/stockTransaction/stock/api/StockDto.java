@@ -16,38 +16,72 @@ public class StockDto {
     private BigDecimal circulatingSupply;
 
     @JsonProperty("circulating_supply")
-    public BigDecimal getCirculatingSupply() { return circulatingSupply; }
+    public BigDecimal getCirculatingSupply() {
+        return circulatingSupply;
+    }
+
     @JsonProperty("circulating_supply")
-    public void setCirculationSupply(BigDecimal value) { this.circulatingSupply = value; }
+    public void setCirculationSupply(BigDecimal value) {
+        this.circulatingSupply = value;
+    }
 
     @JsonProperty("max_supply")
-    public BigDecimal getMaxSupply() { return maxSupply; }
+    public BigDecimal getMaxSupply() {
+        return maxSupply;
+    }
+
     @JsonProperty("max_supply")
-    public void setMaxSupply(BigDecimal value) { this.maxSupply = value; }
+    public void setMaxSupply(BigDecimal value) {
+        this.maxSupply = value;
+    }
 
     @JsonProperty("total_supply")
-    public BigDecimal getTotalSupply() { return totalSupply; }
+    public BigDecimal getTotalSupply() {
+        return totalSupply;
+    }
+
     @JsonProperty("total_supply")
-    public void setTotalSupply(BigDecimal value) { this.totalSupply = value; }
-
+    public void setTotalSupply(BigDecimal value) {
+        this.totalSupply = value;
+    }
 
     @JsonProperty("id")
-    public long getID() { return id; }
+    public long getID() {
+        return id;
+    }
+
     @JsonProperty("id")
-    public void setID(long value) { this.id = value; }
+    public void setID(long value) {
+        this.id = value;
+    }
 
     @JsonProperty("name")
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
+
     @JsonProperty("name")
-    public void setName(String value) { this.name = value; }
+    public void setName(String value) {
+        this.name = value;
+    }
 
     @JsonProperty("symbol")
-    public String getSymbol() { return symbol; }
+    public String getSymbol() {
+        return symbol;
+    }
+
     @JsonProperty("symbol")
-    public void setSymbol(String value) { this.symbol = value; }
+    public void setSymbol(String value) {
+        this.symbol = value;
+    }
 
     @JsonProperty("quote")
-    public Quote getQuote() { return quote; }
+    public Quote getQuote() {
+        return quote;
+    }
+
     @JsonProperty("quote")
-    public void setQuote(Quote value) { this.quote = value; }
+    public void setQuote(Quote value) {
+        this.quote = value;
+    }
 }

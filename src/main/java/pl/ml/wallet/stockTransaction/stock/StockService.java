@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class StockService {
-    // paginacje zrobić na markecie
     private StockRepository stockRepository;
     private static final String URL = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?CMC_PRO_API_KEY=3a006fe7-4d68-4939-8b7b-d2442e3405bb&start=1&limit=80";
 
@@ -57,7 +56,6 @@ public class StockService {
                             .contains(title.toLowerCase())
                     )
                     .collect(Collectors.toList());
-
         } else {
             return stocks;
         }
@@ -106,50 +104,6 @@ public class StockService {
         return dto;
     }
 
-    public void sort(String sort, List<StockMarketProfileDto> stocks) {
-        switch (sort) {
-            case "crypto":
-                stocks.sort(new StockNameComparator());
-                break;
-            case "crypto-desc":
-                stocks.sort(new StockNameComparator().reversed());
-                break;
-            case "price":
-                stocks.sort(new StockPriceComparator());
-                break;
-            case "price-desc":
-                stocks.sort(new StockPriceComparator().reversed());
-                break;
-            case "1h":
-                stocks.sort(new Stock1hComparator());
-                break;
-            case "1h-desc":
-                stocks.sort(new Stock1hComparator().reversed());
-                break;
-            case "24h":
-                stocks.sort(new Stock24hComparator());
-                break;
-            case "24h-desc":
-                stocks.sort(new Stock24hComparator().reversed());
-                break;
-            case "7d":
-                stocks.sort(new Stock7dComparator());
-                break;
-            case "7d-desc":
-                stocks.sort(new Stock7dComparator().reversed());
-                break;
-            case "marketcap":
-                stocks.sort(new StockMarketCapComparator());
-                break;
-            case "marketcap-desc":
-                stocks.sort(new StockMarketCapComparator().reversed());
-                break;
-
-            default:
-                throw new IllegalStateException("Unexpected value: " + sort);
-        }
-    }
-
     public void init() {
         RestTemplate restTemplate = new RestTemplate();
         List<Stock> all = stockRepository.findAll();
@@ -157,8 +111,6 @@ public class StockService {
         StockResponseDto forObject = restTemplate.getForObject(URL, StockResponseDto.class);
         List<StockDto> data = forObject.getData();
         data.stream().forEach(s -> {
-
-//            if (s.getName() != null || !s.getName().equals("")) {
 
             String name = s.getName();
             String symbol = s.getSymbol();
@@ -198,7 +150,6 @@ public class StockService {
                 save(s2);
 
             });
-//            }
         });
     }
 
@@ -214,12 +165,31 @@ public class StockService {
         return stockRepository.findAllByFavouriteIsTrue();
     }
 
-    public Stock findById(long id) {
-        return stockRepository.findById(id).orElseThrow();
-    }
-
     public List<StockMarketDto> findAllStockNames() {
         return stockRepository.findAllStocksName();
     }
 
+    public String getRange(String range) {
+        if (range == null) {
+            return "1D";
+        } else {
+            return range;
+        }
+    }
+
+    public String getType(String type) {
+        if (type == null) {
+            return "All";
+        } else {
+            return type;
+        }
+    }
+
+    public String getTitle(String title) {
+        if (title == null) {
+            return "";
+        } else {
+            return title;
+        }
+    }
 }

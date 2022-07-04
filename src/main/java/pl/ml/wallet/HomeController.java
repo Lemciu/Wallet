@@ -13,7 +13,6 @@ import pl.ml.wallet.transaction.BudgetTransactionService;
 import pl.ml.wallet.transaction.TransactionType;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Controller
@@ -29,66 +28,42 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(@RequestParam (required = false) String range,
-            Model model) {
-
-        model.addAttribute("transactions", budgetTransactionService.findAll());
-        model.addAttribute("balance", stockTransactionService.getTotalBalance());
-        model.addAttribute("cash", budgetTransactionService.getBalanceInPln());
+    public String home(Model model) {
+        model.addAttribute("balance", stockTransactionService.getTotalBalanceInPln());
+        model.addAttribute("cash", budgetTransactionService.getCashBalance());
         model.addAttribute("cashPercent", stockTransactionService.getBalanceInPercent());
-        model.addAttribute("savings", budgetTransactionService.getSavingsAmount());
-        model.addAttribute("savingsPercent", stockTransactionService.getSavingsInPercent());
-        model.addAttribute("investmentsInPln", stockTransactionService.getCryptoBalance().multiply(BigDecimal.valueOf(4.28)));
+        model.addAttribute("investmentsInPln", CurrencyExchange.toPln(stockTransactionService.getCryptoBalance()));
         model.addAttribute("investments", stockTransactionService.getCryptoBalance());
-        model.addAttribute("investmentsProfit", 4.21);
         model.addAttribute("investmentsPercent", stockTransactionService.getInvestmentsInPercent());
-
-        model.addAttribute("balance", stockTransactionService.getTotalBalance());
-        model.addAttribute("percentageProfit", stockTransactionService.getPercentageProfit(range));
-        model.addAttribute("profit", stockTransactionService.getProfit(range));
         model.addAttribute("favouriteStocks", stockService.findFavouriteStocks());
         return "dashboard";
     }
 
-    @GetMapping("/crypto")
-    public String budget(@RequestParam (required = false) String range,
-                         Model model) {
-        model.addAttribute("balance", stockTransactionService.getTotalBalance());
-        model.addAttribute("percentageProfit", stockTransactionService.getPercentageProfit(range));
-        model.addAttribute("profit", stockTransactionService.getProfit(range));
-        model.addAttribute("favouriteStocks", stockService.findFavouriteStocks());
-
-        return "budget";
-    }
-
-    @GetMapping("/cash")
-    public String cash(Model model) {
-        model.addAttribute("transactions", budgetTransactionService.findAll());
-        model.addAttribute("balance", budgetTransactionService.getBalanceInPln());
-        return "cash";
-    }
-
     @GetMapping("/cashWallet")
-    public String cash1(Model model) {
-        model.addAttribute("transactions", budgetTransactionService.findAll());
-        model.addAttribute("balance", budgetTransactionService.getBalanceInPln());
-        return "cash";
+    public String cashWallet(@RequestParam (required = false) String range,
+                             @RequestParam (required = false) String type,
+                             Model model) {
+        model.addAttribute("transactions", budgetTransactionService.findAllByType(type));
+        model.addAttribute("balance", budgetTransactionService.getCashBalance());
+        model.addAttribute("range", stockService.getRange(range));
+        model.addAttribute("type", stockService.getType(type));
+        model.addAttribute("profit", budgetTransactionService.getProfit(range));
+        return "cashWallet";
     }
 
     @GetMapping("/cryptoWallet")
-    public String cash31(@RequestParam (required = false) String range,
+    public String cryptoWallet(@RequestParam (required = false) String range,
                          Model model) {
         model.addAttribute("accounts",
                 stockTransactionService.toAccountDto(stockTransactionService.findAllOwnedAccounts(range)));
         model.addAttribute("balance", stockTransactionService.getCryptoBalance());
         model.addAttribute("percentageProfit", stockTransactionService.getPercentageProfit(range));
-        model.addAttribute("profit", stockTransactionService.getProfit(range));
-        model.addAttribute("favouriteStocks", stockService.findFavouriteStocks());
+        model.addAttribute("profit", stockTransactionService.getCryptoProfit(range));
         return "cryptoWallet";
     }
 
     @PostMapping("/swapCrypto")
-    public String swapCryptoTo(@RequestParam String from,
+    public String swapCrypto(@RequestParam String from,
                                @RequestParam String to,
                                @RequestParam Double amount,
                                @RequestParam Double rate) {
@@ -116,16 +91,13 @@ public class HomeController {
     }
 
     @GetMapping("/swap")
-    public String swapCrypto(@RequestParam String from,
+    public String swapCryptoForm(@RequestParam String from,
                              @RequestParam String to,
                              Model model) {
 
         model.addAttribute("stockAmount", stockTransactionService.getAmount(from));
         Stock sellStock = stockService.findBySymbol(from).orElseThrow();
         Stock buyStock = stockService.findBySymbol(to).orElseThrow();
-        // to zamienić na DTO!
-//        czy ja tutaj powinienem uzywać tego Stock? Raczej jakiegoś Dto
-//        nazwa,symbol, amount
         model.addAttribute("sellStock", sellStock);
         model.addAttribute("buyStock", buyStock);
         model.addAttribute("rate", stockTransactionService.getRatio(sellStock, buyStock));
@@ -144,35 +116,11 @@ public class HomeController {
         model.addAttribute("stocks",  stockService.findAllStockNames());
         model.addAttribute("form", "Buy");
         model.addAttribute("action", "buyCrypto");
-        BigDecimal balance = budgetTransactionService.getBalanceInPln();
+        BigDecimal balance = budgetTransactionService.getCashBalance();
         model.addAttribute("balance", balance);
-        model.addAttribute("dollarBalance", budgetTransactionService.getBalanceInPln().divide(BigDecimal.valueOf(4.28), RoundingMode.HALF_UP));
+        model.addAttribute("dollarBalance", CurrencyExchange.toUsd(budgetTransactionService.getCashBalance()));
         model.addAttribute("maxValue", budgetTransactionService.getMaxAmount(balance, stock));
         return "formCrypto";
-    }
-
-    @GetMapping("/StocksForm")
-    public String stocksToBuy(Model model) {
-        System.out.println("gites stocks form");
-        model.addAttribute("stocks",  stockService.findAllStockNames());
-        return "stockList";
-    }
-
-    @PostMapping("/tradeStock")
-    public String buyBtc(@RequestParam(required = false) String symbol,
-                         @RequestParam String transactionType,
-                         @RequestParam(required = false) Double amount) {
-        switch (transactionType) {
-            case "buyCrypto":
-                stockTransactionService.buyCrypto(amount, symbol);
-                break;
-            case "sellCrypto":
-                stockTransactionService.sellCrypto(amount, symbol);
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + transactionType);
-        }
-        return "redirect:/" + transactionType + "?symbol=" + symbol;
     }
 
     @GetMapping("/sellCrypto")
@@ -184,11 +132,19 @@ public class HomeController {
         model.addAttribute("stocks",  stockTransactionService.findAllOwnedStockNames());
         model.addAttribute("form", "Sell");
         model.addAttribute("action", "sellCrypto");
-        BigDecimal balance = budgetTransactionService.getBalanceInPln();
-        model.addAttribute("balance", balance);
-        model.addAttribute("dollarBalance", budgetTransactionService.getBalanceInPln().divide(BigDecimal.valueOf(4.28), RoundingMode.HALF_UP));
+        model.addAttribute("balance", budgetTransactionService.getCashBalance());
+        model.addAttribute("dollarBalance", CurrencyExchange.toUsd(budgetTransactionService.getCashBalance()));
         model.addAttribute("maxValue", stockTransactionService.getAmount(symbol));
         return "formCrypto";
     }
+
+    @PostMapping("/tradeStock")
+    public String buyBtc(@RequestParam(required = false) String symbol,
+                         @RequestParam String transactionType,
+                         @RequestParam(required = false) Double amount) {
+        stockTransactionService.tradeStock(transactionType, symbol, amount);
+        return "redirect:/" + transactionType + "?symbol=" + symbol;
+    }
+
 
 }

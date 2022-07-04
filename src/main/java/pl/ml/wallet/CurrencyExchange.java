@@ -1,8 +1,11 @@
 package pl.ml.wallet;
 
+import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.math.MathContext;
 
+@Service
 public class CurrencyExchange {
 
     public static BigDecimal toPln(BigDecimal usdValue) {

@@ -12,11 +12,6 @@ public class AccountProfileDto {
     private boolean favourite;
     private BigDecimal currentPrice;
 
-    public AccountProfileDto() {
-//        podpiąc to podobnie do tego z portfolio ?
-    }
-//    dwa dobre konstruktory:
-
     public AccountProfileDto(String name, String symbol, BigDecimal amount, BigDecimal value, Double percentChange, BigDecimal valueChange, boolean favourite, BigDecimal currentPrice) {
         this.name = name;
         this.symbol = symbol;
@@ -92,23 +87,4 @@ public class AccountProfileDto {
         this.currentPrice = currentPrice;
     }
 
-    @Override
-    public String toString() {
-        return "AccountProfileDto{" +
-                "name='" + name + '\'' +
-                ", symbol='" + symbol + '\'' +
-                ", amount=" + amount +
-                ", value=" + value +
-                ", percentChange=" + percentChange +
-                ", favourite=" + favourite +
-                ", currentPrice=" + currentPrice +
-                '}';
-    }
-
-    //    List<Transaction>
-//    może na razie bez historii transakcji
-//    Name, symbol,currentPrice, amount,value, percentChange, List<Transaction>
-//    transaction -> date,amount,value,from to?
-//    może  tez byc rownie tylko BTC -> ADA 0.0923 BTC i data
-//    i dopiero w detalach więcej info wyświetlać
 }

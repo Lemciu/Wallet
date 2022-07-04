@@ -1,6 +1,7 @@
 package pl.ml.wallet.stockTransaction;
 
 import org.springframework.stereotype.Service;
+import pl.ml.wallet.CurrencyExchange;
 import pl.ml.wallet.stockTransaction.dto.*;
 import pl.ml.wallet.stockTransaction.stock.*;
 import pl.ml.wallet.stockTransaction.stock.comparator.SwapDateComparator;
@@ -30,6 +31,70 @@ public class StockTransactionService {
         this.swapTransactionService = swapTransactionService;
     }
 
+    // to fix!
+    public List<SwapTransactionDto> findAllTransactionsByStock(Long id, String type, String secondType) {
+
+        List<StockTransaction> transactions = stockTransactionRepository.findAllByStock_Id(id);
+
+
+        List<StockTransaction> bought = transactions.stream().filter(t -> t.getType().equals(StockTransactionType.BUY)).collect(Collectors.toList());
+        List<StockTransaction> sold = transactions.stream().filter(t -> t.getType().equals(StockTransactionType.SELL)).collect(Collectors.toList());
+
+        List<StockTransaction> swap = transactions.stream().filter(t -> t.getType().equals(StockTransactionType.SWAP)).collect(Collectors.toList());
+        List<SwapTransaction> allSwaps = swapTransactionService.findAll();
+
+        List<Long> collect = swap.stream().map(StockTransaction::getId).collect(Collectors.toList());
+
+        List<SwapTransactionDto> soldDto = sold.stream().map(t -> new SwapTransactionDto("USD", t.getAmount().multiply(t.getPrice()).negate().doubleValue(), t.getStock().getSymbol(), t.getAmount().negate().doubleValue(), t.getDate())).collect(Collectors.toList());
+        List<SwapTransactionDto> boughtDto = bought.stream().map(t -> new SwapTransactionDto(t.getStock().getSymbol(), t.getAmount().doubleValue(), "USD", t.getAmount().multiply(t.getPrice()).doubleValue(), t.getDate())).collect(Collectors.toList());
+
+        if (collect.isEmpty()) {
+            soldDto.addAll(boughtDto);
+            soldDto.sort(new SwapDateComparator());
+            return soldDto;
+        } else {
+
+            List<SwapTransactionDto> result = allSwaps.stream().filter(s1 -> {
+                Long boughtStockTransactionId = s1.getBoughtStockTransactionId();
+                Long soldStockTransactionId = s1.getSoldStockTransactionId();
+                for (Long id2 : collect) {
+                    if (id2 == boughtStockTransactionId || id2 == soldStockTransactionId) {
+                        return true;
+                    }
+                }
+                return false;
+            }).map(s -> {
+                Long boughtStockTransactionId = s.getBoughtStockTransactionId();
+                Long soldStockTransactionId = s.getSoldStockTransactionId();
+                StockTransaction buyTransaction = findById(boughtStockTransactionId);
+                StockTransaction sellTransaction = findById(soldStockTransactionId);
+
+                return new SwapTransactionDto(buyTransaction.getStock().getSymbol(),
+                        buyTransaction.getAmount().doubleValue(), sellTransaction.getStock().getSymbol(),
+                        sellTransaction.getAmount().negate().doubleValue(), sellTransaction.getDate());
+            }).collect(Collectors.toList());
+            result.addAll(soldDto);
+            result.addAll(boughtDto);
+            result.sort(new SwapDateComparator());
+            return result;
+        }
+
+    }
+
+    public void tradeStock(String transactionType, String symbol, Double amount) {
+        switch (transactionType) {
+            case "buyCrypto":
+                buyCrypto(amount, symbol);
+                break;
+            case "sellCrypto":
+                sellCrypto(amount, symbol);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + transactionType);
+        }
+
+    }
+
     public List<SwapTransactionDto> findAllSwapTransactions() {
         List<SwapTransaction> all = swapTransactionService.findAll();
 
@@ -48,11 +113,6 @@ public class StockTransactionService {
     }
 
     public StockTransaction findById(Long id) {
-        if (stockTransactionRepository.findById(id).isPresent()) {
-            System.out.println("asd");
-        } else {
-            System.out.println("as123d");
-        }
         return stockTransactionRepository.findById(id).orElseThrow();
     }
 
@@ -117,10 +177,6 @@ public class StockTransactionService {
 
     }
 
-    private List<TransactionOwnedDto> getDtoWithAllChange(String symbol) {
-        return stockTransactionRepository.findAllTransactionToProfileWithAllChange(symbol);
-    }
-
     public List<TransactionOwnedDto> findAllOwnedAccounts(String range) {
         if (range == null) {
             range = "1D";
@@ -169,10 +225,10 @@ public class StockTransactionService {
     }
 
     public BigDecimal getPercentageProfit(String range) {
-        return getProfit(range).multiply(BigDecimal.valueOf(100)).divide(getCryptoBalance(), RoundingMode.HALF_UP);
+        return getCryptoProfit(range).multiply(BigDecimal.valueOf(100)).divide(getCryptoBalance(), RoundingMode.HALF_UP);
     }
 
-    public BigDecimal getProfitAccount(String range) {
+    public BigDecimal getCryptoProfit(String range) {
         if (range == null) {
             range = "1D";
         }
@@ -189,29 +245,7 @@ public class StockTransactionService {
             case "3M":
                 return getProfitOfStock(stockTransactionRepository.findAllToGet90dProfit()).setScale(2, RoundingMode.HALF_UP);
             case "max":
-                return getFinalProfitOfStock(stockTransactionRepository.findAllToGetWholeProfit()).setScale(2, RoundingMode.HALF_UP);
-            default:
-                return null;
-        }
-    }
-
-    public BigDecimal getProfit(String range) {
-        if (range == null) {
-            range = "1D";
-        }
-
-        switch (range) {
-            case "1h":
-                return getProfitOfStock(stockTransactionRepository.findAllToGet1hProfit()).setScale(2, RoundingMode.HALF_UP);
-            case "1D":
-                return getProfitOfStock(stockTransactionRepository.findAllToGet24hProfit()).setScale(2, RoundingMode.HALF_UP);
-            case "1W":
-                return getProfitOfStock(stockTransactionRepository.findAllToGet7dProfit()).setScale(2, RoundingMode.HALF_UP);
-            case "1M":
-                return getProfitOfStock(stockTransactionRepository.findAllToGet30dProfit()).setScale(2, RoundingMode.HALF_UP);
-            case "3M":
-                return getProfitOfStock(stockTransactionRepository.findAllToGet90dProfit()).setScale(2, RoundingMode.HALF_UP);
-            case "max":
+                System.out.println("max max2");
                 return getFinalProfitOfStock(stockTransactionRepository.findAllToGetWholeProfit()).setScale(2, RoundingMode.HALF_UP);
             default:
                 return null;
@@ -237,20 +271,24 @@ public class StockTransactionService {
 
     public void sellCrypto(Double amount, String symbol) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+
         stockTransactionRepository.save(new StockTransaction(LocalDate.now(), stock,
                 BigDecimal.valueOf(amount).negate(), stock.getCurrentPrice(), StockTransactionType.SELL));
+
         budgetTransactionService.save(new BudgetTransaction(
-                BigDecimal.valueOf(amount).multiply(stock.getCurrentPrice()).multiply(BigDecimal.valueOf(4.28)),
-                "Sell " + stock.getSymbol(), amount + " " + stock.getSymbol() + " -> PLN" ,
+                BigDecimal.valueOf(amount).multiply(CurrencyExchange.toPln(stock.getCurrentPrice())),
+                "Sell " + stock.getSymbol(), amount + " " + stock.getSymbol() + " -> PLN",
                 TransactionType.INCOME, LocalDate.now()));
     }
 
     public void buyCrypto(Double amount, String symbol) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+
         stockTransactionRepository.save(new StockTransaction(LocalDate.now(), stock,
                 BigDecimal.valueOf(amount), stock.getCurrentPrice(), StockTransactionType.BUY));
+
         budgetTransactionService.save(new BudgetTransaction(
-                BigDecimal.valueOf(amount).multiply(stock.getCurrentPrice()).multiply(BigDecimal.valueOf(4.28)),
+                BigDecimal.valueOf(amount).multiply(CurrencyExchange.toPln(stock.getCurrentPrice())),
                 "Buy " + stock.getSymbol(), "PLN -> " + stock.getSymbol() + " " + amount + " ",
                 TransactionType.EXPENSE, LocalDate.now()));
     }
@@ -260,34 +298,29 @@ public class StockTransactionService {
     }
 
     public BigDecimal getAmount(String symbol) {
-        return stockTransactionRepository.findAllBySymbol(symbol).stream()
+        return stockTransactionRepository.findAllOwnedDtoBySymbol(symbol).stream()
                 .map(TransactionOwnedDto::getAmount)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public BigDecimal getTotalBalance() {
-        BigDecimal cash = budgetTransactionService.getBalanceInPln();
-        BigDecimal investments = getCryptoBalance().multiply(BigDecimal.valueOf(4.28));
-        BigDecimal savings = budgetTransactionService.getSavingsAmount();
-        return investments.add(cash).add(savings);
+    public BigDecimal getTotalBalanceInPln() {
+        BigDecimal cash = budgetTransactionService.getCashBalance();
+        BigDecimal investments = CurrencyExchange.toPln(getCryptoBalance());
+        return investments.add(cash);
     }
 
     public BigDecimal getBalanceInPercent() {
-        BigDecimal hundretPercent = getTotalBalance();
-        BigDecimal x = budgetTransactionService.getBalanceInPln();
-        return x.multiply(BigDecimal.valueOf(100)).divide(hundretPercent, MathContext.DECIMAL64);
+        return budgetTransactionService
+                .getCashBalance()
+                .multiply(BigDecimal.valueOf(100))
+                .divide(getTotalBalanceInPln(), MathContext.DECIMAL64);
     }
 
     public BigDecimal getInvestmentsInPercent() {
-        BigDecimal hundretPercent = getTotalBalance();
-        BigDecimal x = getCryptoBalance().multiply(BigDecimal.valueOf(4.28));
-        return x.multiply(BigDecimal.valueOf(100)).divide(hundretPercent, MathContext.DECIMAL64);
-    }
-
-    public BigDecimal getSavingsInPercent() {
-        BigDecimal hundretPercent = getTotalBalance();
-        BigDecimal x = budgetTransactionService.getSavingsAmount();
-        return x.multiply(BigDecimal.valueOf(100)).divide(hundretPercent, MathContext.DECIMAL64);
+        return CurrencyExchange
+                .toPln(getCryptoBalance())
+                .multiply(BigDecimal.valueOf(100))
+                .divide(getTotalBalanceInPln(), MathContext.DECIMAL64);
     }
 
     public BigDecimal getRatio(Stock sellStock, Stock buyStock) {
@@ -300,8 +333,8 @@ public class StockTransactionService {
         Stock sellStock = stockService.findBySymbol(from).orElseThrow();
         Stock buyStock = stockService.findBySymbol(to).orElseThrow();
         BigDecimal result = BigDecimal.valueOf(rate).multiply(BigDecimal.valueOf(amount), MathContext.DECIMAL64);
-        StockTransaction save1 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), buyStock, result, buyStock.getCurrentPrice(), StockTransactionType.SWAP));
-        StockTransaction save2 = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), sellStock, BigDecimal.valueOf(amount).negate(), sellStock.getCurrentPrice(), StockTransactionType.SWAP));
-        swapTransactionService.add(save1.getId(), save2.getId());
+        StockTransaction boughtStock = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), buyStock, result, buyStock.getCurrentPrice(), StockTransactionType.SWAP));
+        StockTransaction soldStock = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), sellStock, BigDecimal.valueOf(amount).negate(), sellStock.getCurrentPrice(), StockTransactionType.SWAP));
+        swapTransactionService.add(boughtStock.getId(), soldStock.getId());
     }
 }

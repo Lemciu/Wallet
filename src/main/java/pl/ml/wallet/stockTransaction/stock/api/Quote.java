@@ -8,7 +8,12 @@ public class Quote {
     private Usd usd;
 
     @JsonProperty("USD")
-    public Usd getUsd() { return usd; }
+    public Usd getUsd() {
+        return usd;
+    }
+
     @JsonProperty("USD")
-    public void setUsd(Usd value) { this.usd = value; }
+    public void setUsd(Usd value) {
+        this.usd = value;
+    }
 }
