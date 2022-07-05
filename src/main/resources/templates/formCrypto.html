@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Buy/Sell</title>
+    <script src="script.js"></script>
     <link rel="stylesheet" th:href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -15,7 +16,7 @@
         <div class="tradeHeader">
             <h3 th:text="${form}"></h3>
             <div class="dropdown">
-                <button onclick="myFunction()" class="dropbtn" th:text="${currentStock}"></button>
+                <button onclick="dropList()" class="dropbtn" th:text="${currentStock}"></button>
                 <div id="myDropdown" class="dropdown-content">
                     <a th:href="|${action}?symbol=${stock.symbol}|" th:each="stock: ${stocks}"
                        th:text="|${stock.name} ${stock.symbol}|"></a>
@@ -36,11 +37,14 @@
                         </div>
                     </div>
                     <div class="stockAmount">
+                        <input th:hidden="hidden" th:id="currentPrice" th:value="${currentPrice}">
                         <p>Amount</p>
                         <input type="text" th:name="symbol" th:value="${symbol}" th:hidden="hidden">
-                        <input class="form-control" th:name="amount" type="number" th:step="0.000001" th:max="${maxValue}" th:required="required">
+                        <input class="form-control" th:name="amount" id="amount" type="number" th:step="0.000001" th:max="${maxValue}" th:required="required" th:value="0" onkeyup="printSum()">
                         <p th:text="|Max: *{#numbers.formatDecimal(maxValue, 1, 'COMMA', 6, 'POINT')}|"></p>
-                        <input class="form-control" disabled placeholder="Suma" id="tradeValue">
+                        <p id="test123"></p>
+                        <p id="test111"></p>
+                        <input class="form-control"  id="tradeValue" disabled>
                         <button class="btn btn-secondary" id="tradeButton">Trade</button>
                     </div>
                 </form>
@@ -48,23 +52,5 @@
         </div>
     </div>
 </div>
-<script>
-    function myFunction() {
-        document.getElementById("myDropdown").classList.toggle("show");
-    }
-    window.onclick = function (event) {
-        if (!event.target.matches('.dropbtn')) {
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            var i;
-            for (i = 0; i < dropdowns.length; i++) {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('show')) {
-                    openDropdown.classList.remove('show');
-                }
-            }
-        }
-    }
-</script>
-
 </body>
 </html>

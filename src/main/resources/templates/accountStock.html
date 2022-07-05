@@ -37,7 +37,7 @@
                    id="accountStockValue"></p>
                 <div id="amountStock">
                     <p th:text="|*{#numbers.formatDecimal(stock.amount, 1, 'COMMA', 5, 'POINT')} ${stock.symbol}|"></p>
-                    <p th:text="|1 ${stock.symbol} = $*{#numbers.formatDecimal(stock.currentPrice, 1, 'COMMA', 5, 'POINT')}|"></p>
+                    <p th:text="|1 ${stock.symbol} = $*{#numbers.formatDecimal(stock.currentPrice, 1, 'COMMA', 2, 'POINT')}|"></p>
                 </div>
             </div>
             <div class="accountStockChange">

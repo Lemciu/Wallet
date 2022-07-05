@@ -90,7 +90,7 @@ INSERT INTO budget_transaction
 (transaction_value, title, description, type, date)
 VALUES
     (15000, 'Sprzedaż auta','Sprzedanie starego samochodu' , 'INCOME', '2022-03-13'),
-    (3000, 'Wypłata','wypłata za maj + odebranie nadgodzin' , 'INCOME', '2022-05-10'),
+    (3350, 'Wypłata','wypłata za maj + odebranie nadgodzin' , 'INCOME', '2022-05-10'),
     (3000, 'Wypłata','wypłata za kwiecień' , 'INCOME', '2022-04-10'),
     (214, 'Zakupy spożywcze','biedra' ,  'EXPENSE', '2022-06-02'),
     (150, 'Prezent dla Wojtka','Zdalnie sterowany samochodzik' ,  'EXPENSE', '2022-04-07'),

@@ -113,6 +113,7 @@ public class HomeController {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         model.addAttribute("symbol", stock.getSymbol());
         model.addAttribute("currentStock", stock.getName());
+        model.addAttribute("currentPrice", stock.getCurrentPrice());
         model.addAttribute("stocks",  stockService.findAllStockNames());
         model.addAttribute("form", "Buy");
         model.addAttribute("action", "buyCrypto");
@@ -128,6 +129,7 @@ public class HomeController {
         model.addAttribute("form", "Sell");
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         model.addAttribute("symbol", stock.getSymbol());
+        model.addAttribute("currentPrice", stock.getCurrentPrice());
         model.addAttribute("currentStock", stock.getName());
         model.addAttribute("stocks",  stockTransactionService.findAllOwnedStockNames());
         model.addAttribute("form", "Sell");

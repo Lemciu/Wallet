@@ -205,7 +205,6 @@
 }
 
 #tradeValue {
-    color: white;
     margin-top: 20px;
     margin-bottom: 0;
 }
@@ -760,7 +759,7 @@
     border: none;
     cursor: pointer;
 }
-.swapInput {
+#swapInput {
     max-height: 40px;
 }
 .headForm {
