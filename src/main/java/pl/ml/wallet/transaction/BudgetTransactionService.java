@@ -40,7 +40,9 @@ public class BudgetTransactionService {
         if (type == null || type.equals("All")) {
             return findAll();
         } else {
-            return budgetTransactionRepository.findAllByType(getTypeByName(type));
+            List<BudgetTransaction> result = budgetTransactionRepository.findAllByType(getTypeByName(type));
+            result.sort(new BudgetDateComparator());
+            return result;
         }
     }
 

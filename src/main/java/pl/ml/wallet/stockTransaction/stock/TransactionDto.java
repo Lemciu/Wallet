@@ -2,14 +2,14 @@ package pl.ml.wallet.stockTransaction.stock;
 
 import java.time.LocalDate;
 
-public class SwapTransactionDto {
+public class TransactionDto {
     private String symbolBoughtStock;
     private Double boughtAmount;
     private String symbolSoldStock;
     private Double soldAmount;
     private LocalDate date;
 
-    public SwapTransactionDto(String symbolBoughtStock, Double boughtAmount, String symbolSoldStock, Double soldAmount, LocalDate date) {
+    public TransactionDto(String symbolBoughtStock, Double boughtAmount, String symbolSoldStock, Double soldAmount, LocalDate date) {
         this.symbolBoughtStock = symbolBoughtStock;
         this.boughtAmount = boughtAmount;
         this.symbolSoldStock = symbolSoldStock;

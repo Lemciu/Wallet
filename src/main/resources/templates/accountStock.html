@@ -62,14 +62,11 @@
         </div>
         <div class="navbarButtons">
             <div class="tableNavbar">
-                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=All, secondType= ${secondType})}"><button class="dropbtn">All</button></a>
-                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=Crypto, secondType= ${secondType})}"><button class="dropbtn">Crypto</button></a>
-                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=Fiat, secondType= ${secondType})}"><button class="dropbtn">Fiat</button></a>
+                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=All)}"><button class="dropbtn">All</button></a>
+                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=Crypto)}"><button class="dropbtn">Crypto</button></a>
+                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=Fiat)}"><button class="dropbtn">Fiat</button></a>
             </div>
             <div class="tableNavbar">
-                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=${type}, secondType=Buy)}"><button class="dropbtn">Buy</button></a>
-                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=${type}, secondType=Sell)}"><button class="dropbtn">Sell</button></a>
-                <a th:href="@{/accountStock(symbol=${stock.symbol}, range=${range},type=${type}, secondType=All)}"><button class="dropbtn">All</button></a>
             </div>
         </div>
         <div class="accountStockHistory">

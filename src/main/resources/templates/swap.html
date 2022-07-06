@@ -32,7 +32,7 @@
                                th:text="${stock.name}"></a>
                         </div>
                     </div>
-                    <input class="swapInput" th:name="amount" th:step="0.000001" id="buyAmount" type="number" th:max="${stockAmount}" th:value=0 onkeyup="printAmount()">
+                    <input class="swapInput" th:name="amount" th:step="0.000001" id="buyAmount" type="number" th:max="${stockAmount}" onkeyup="printAmount()">
                 </div>
                 <p>To</p>
                 <p id="updown"><a th:href="|swap?from=${buyStock.symbol}&to=${sellStock.symbol}|"><img

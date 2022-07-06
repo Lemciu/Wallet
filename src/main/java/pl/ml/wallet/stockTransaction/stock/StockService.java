@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import pl.ml.wallet.stockTransaction.stock.api.StockDto;
 import pl.ml.wallet.stockTransaction.stock.api.StockResponseDto;
-import pl.ml.wallet.stockTransaction.stock.comparator.*;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketDto;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketProfileDto;
 
@@ -20,6 +19,22 @@ public class StockService {
 
     public StockService(StockRepository stockRepository) {
         this.stockRepository = stockRepository;
+    }
+
+    public void save(Stock stock) {
+        stockRepository.save(stock);
+    }
+
+    public Optional<Stock> findBySymbol(String symbol) {
+        return stockRepository.findBySymbol(symbol);
+    }
+
+    public List<StockMarketDto> findFavouriteStocks() {
+        return stockRepository.findAllByFavouriteIsTrue();
+    }
+
+    public List<StockMarketDto> findAllStockNames() {
+        return stockRepository.findAllStocksName();
     }
 
     public List<StockMarketDto> findAll(String title, String range) {
@@ -59,6 +74,10 @@ public class StockService {
         } else {
             return stocks;
         }
+    }
+
+    public List<StockMarketDto> findFirst20Stocks(List<StockMarketDto> stocks) {
+        return stocks.stream().filter(s -> s.getId() <= 20).collect(Collectors.toList());
     }
 
     public StockMarketProfileDto toMarketDto(Stock stock, String range) {
@@ -151,22 +170,6 @@ public class StockService {
 
             });
         });
-    }
-
-    public void save(Stock stock) {
-        stockRepository.save(stock);
-    }
-
-    public Optional<Stock> findBySymbol(String symbol) {
-        return stockRepository.findBySymbol(symbol);
-    }
-
-    public List<StockMarketDto> findFavouriteStocks() {
-        return stockRepository.findAllByFavouriteIsTrue();
-    }
-
-    public List<StockMarketDto> findAllStockNames() {
-        return stockRepository.findAllStocksName();
     }
 
     public String getRange(String range) {

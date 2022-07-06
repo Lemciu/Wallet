@@ -35,7 +35,7 @@ public class StockController {
         model.addAttribute("title", title);
         model.addAttribute("range", range);
         List<StockMarketDto> stocks = stockService.findAll(title, range);
-        model.addAttribute("stocks", stocks.stream().filter(s -> s.getId() <= 20).collect(Collectors.toList()));
+        model.addAttribute("stocks", stockService.findFirst20Stocks(stocks));
         return "market";
 
     }
@@ -44,6 +44,7 @@ public class StockController {
     public String addToFavourite(@RequestParam String symbol,
                                  @RequestParam String side) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
+        System.out.println("side: " + side);
         stock.setFavourite(true);
         stockService.save(stock);
         return "redirect:/" + side + "?symbol=" + symbol;
@@ -54,6 +55,7 @@ public class StockController {
                                       @RequestParam String side) {
         Stock stock = stockService.findBySymbol(symbol).orElseThrow();
         stock.setFavourite(false);
+        System.out.println("side: " + side);
         stockService.save(stock);
         return "redirect:/" + side + "?symbol=" + symbol;
     }
@@ -89,14 +91,12 @@ public class StockController {
         stock.setFavourite(false);
         stockService.save(stock);
 
-
         if (!range.equals("")) {
             return "redirect:/market?title=" + title + "&range=" + range;
         }
         else {
             return "redirect:/market?title=" + title;
         }
-
     }
 
 }

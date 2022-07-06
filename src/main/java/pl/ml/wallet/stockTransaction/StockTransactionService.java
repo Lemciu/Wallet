@@ -31,54 +31,59 @@ public class StockTransactionService {
         this.swapTransactionService = swapTransactionService;
     }
 
-    // to fix!
-    public List<SwapTransactionDto> findAllTransactionsByStock(Long id, String type, String secondType) {
-
+    public List<TransactionDto> findAllTransactionsByStock(Long id, String type) {
+        if (type == null) {
+            type = "All";
+        }
         List<StockTransaction> transactions = stockTransactionRepository.findAllByStock_Id(id);
-
 
         List<StockTransaction> bought = transactions.stream().filter(t -> t.getType().equals(StockTransactionType.BUY)).collect(Collectors.toList());
         List<StockTransaction> sold = transactions.stream().filter(t -> t.getType().equals(StockTransactionType.SELL)).collect(Collectors.toList());
 
+        List<TransactionDto> soldDto = sold.stream().map(t -> new TransactionDto("USD", t.getAmount().multiply(t.getPrice()).negate().doubleValue(), t.getStock().getSymbol(), t.getAmount().negate().doubleValue(), t.getDate())).collect(Collectors.toList());
+        List<TransactionDto> boughtDto = bought.stream().map(t -> new TransactionDto(t.getStock().getSymbol(), t.getAmount().doubleValue(), "USD", t.getAmount().multiply(t.getPrice()).doubleValue(), t.getDate())).collect(Collectors.toList());
+
         List<StockTransaction> swap = transactions.stream().filter(t -> t.getType().equals(StockTransactionType.SWAP)).collect(Collectors.toList());
         List<SwapTransaction> allSwaps = swapTransactionService.findAll();
-
         List<Long> collect = swap.stream().map(StockTransaction::getId).collect(Collectors.toList());
-
-        List<SwapTransactionDto> soldDto = sold.stream().map(t -> new SwapTransactionDto("USD", t.getAmount().multiply(t.getPrice()).negate().doubleValue(), t.getStock().getSymbol(), t.getAmount().negate().doubleValue(), t.getDate())).collect(Collectors.toList());
-        List<SwapTransactionDto> boughtDto = bought.stream().map(t -> new SwapTransactionDto(t.getStock().getSymbol(), t.getAmount().doubleValue(), "USD", t.getAmount().multiply(t.getPrice()).doubleValue(), t.getDate())).collect(Collectors.toList());
-
-        if (collect.isEmpty()) {
-            soldDto.addAll(boughtDto);
-            soldDto.sort(new SwapDateComparator());
-            return soldDto;
-        } else {
-
-            List<SwapTransactionDto> result = allSwaps.stream().filter(s1 -> {
-                Long boughtStockTransactionId = s1.getBoughtStockTransactionId();
-                Long soldStockTransactionId = s1.getSoldStockTransactionId();
-                for (Long id2 : collect) {
-                    if (id2 == boughtStockTransactionId || id2 == soldStockTransactionId) {
-                        return true;
-                    }
+        List<TransactionDto> swapped = allSwaps.stream().filter(s1 -> {
+            Long boughtStockTransactionId = s1.getBoughtStockTransactionId();
+            Long soldStockTransactionId = s1.getSoldStockTransactionId();
+            for (Long id2 : collect) {
+                if (id2.equals(boughtStockTransactionId) || id2.equals(soldStockTransactionId)) {
+                    return true;
                 }
-                return false;
-            }).map(s -> {
-                Long boughtStockTransactionId = s.getBoughtStockTransactionId();
-                Long soldStockTransactionId = s.getSoldStockTransactionId();
-                StockTransaction buyTransaction = findById(boughtStockTransactionId);
-                StockTransaction sellTransaction = findById(soldStockTransactionId);
+            }
+            return false;
+        }).map(s -> {
+            Long boughtStockTransactionId = s.getBoughtStockTransactionId();
+            Long soldStockTransactionId = s.getSoldStockTransactionId();
+            StockTransaction buyTransaction = findById(boughtStockTransactionId);
+            StockTransaction sellTransaction = findById(soldStockTransactionId);
+            return new TransactionDto(buyTransaction.getStock().getSymbol(),
+                    buyTransaction.getAmount().doubleValue(), sellTransaction.getStock().getSymbol(),
+                    sellTransaction.getAmount().negate().doubleValue(), sellTransaction.getDate());
+        }).collect(Collectors.toList());
 
-                return new SwapTransactionDto(buyTransaction.getStock().getSymbol(),
-                        buyTransaction.getAmount().doubleValue(), sellTransaction.getStock().getSymbol(),
-                        sellTransaction.getAmount().negate().doubleValue(), sellTransaction.getDate());
-            }).collect(Collectors.toList());
-            result.addAll(soldDto);
-            result.addAll(boughtDto);
-            result.sort(new SwapDateComparator());
-            return result;
+        List<TransactionDto> result = new ArrayList<>();
+        switch (type) {
+            case "Crypto":
+                result.addAll(swapped);
+                break;
+            case "Fiat":
+                result.addAll(boughtDto);
+                result.addAll(soldDto);
+                break;
+            case "All":
+                result.addAll(boughtDto);
+                result.addAll(soldDto);
+                result.addAll(swapped);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + type);
         }
-
+        result.sort(new SwapDateComparator());
+        return result;
     }
 
     public void tradeStock(String transactionType, String symbol, Double amount) {
@@ -95,16 +100,16 @@ public class StockTransactionService {
 
     }
 
-    public List<SwapTransactionDto> findAllSwapTransactions() {
+    public List<TransactionDto> findAllSwapTransactions() {
         List<SwapTransaction> all = swapTransactionService.findAll();
 
-        List<SwapTransactionDto> result = all.stream().map(s -> {
+        List<TransactionDto> result = all.stream().map(s -> {
             Long boughtStockTransactionId = s.getBoughtStockTransactionId();
             Long soldStockTransactionId = s.getSoldStockTransactionId();
             StockTransaction buyTransaction = findById(boughtStockTransactionId);
             StockTransaction sellTransaction = findById(soldStockTransactionId);
 
-            return new SwapTransactionDto(buyTransaction.getStock().getSymbol(),
+            return new TransactionDto(buyTransaction.getStock().getSymbol(),
                     buyTransaction.getAmount().doubleValue(), sellTransaction.getStock().getSymbol(),
                     sellTransaction.getAmount().negate().doubleValue(), sellTransaction.getDate());
         }).collect(Collectors.toList());
@@ -336,5 +341,12 @@ public class StockTransactionService {
         StockTransaction boughtStock = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), buyStock, result, buyStock.getCurrentPrice(), StockTransactionType.SWAP));
         StockTransaction soldStock = stockTransactionRepository.save(new StockTransaction(LocalDate.now(), sellStock, BigDecimal.valueOf(amount).negate(), sellStock.getCurrentPrice(), StockTransactionType.SWAP));
         swapTransactionService.add(boughtStock.getId(), soldStock.getId());
+    }
+
+    public String getType(String type) {
+        if (type == null) {
+            type = "All";
+        }
+        return type;
     }
 }

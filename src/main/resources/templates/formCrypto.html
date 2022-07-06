@@ -40,7 +40,7 @@
                         <input th:hidden="hidden" th:id="currentPrice" th:value="${currentPrice}">
                         <p>Amount</p>
                         <input type="text" th:name="symbol" th:value="${symbol}" th:hidden="hidden">
-                        <input class="form-control" th:name="amount" id="amount" type="number" th:step="0.000001" th:max="${maxValue}" th:required="required" th:value="0" onkeyup="printSum()">
+                        <input class="form-control" th:name="amount" id="amount" type="number" th:step="0.000001" th:max="${maxValue}" th:required="required" onkeyup="printSum()">
                         <p th:text="|Max: *{#numbers.formatDecimal(maxValue, 1, 'COMMA', 6, 'POINT')}|"></p>
                         <p id="test123"></p>
                         <p id="test111"></p>
