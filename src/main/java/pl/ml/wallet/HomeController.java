@@ -3,9 +3,12 @@ package pl.ml.wallet;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import pl.ml.wallet.currencyExchange.CurrencyExchange;
 import pl.ml.wallet.stockTransaction.stock.StockService;
 import pl.ml.wallet.stockTransaction.StockTransactionService;
 import pl.ml.wallet.transaction.BudgetTransactionService;
+
+import java.time.LocalDate;
 
 @Controller
 public class HomeController {
@@ -28,6 +31,8 @@ public class HomeController {
         model.addAttribute("investments", stockTransactionService.getCryptoBalance());
         model.addAttribute("investmentsPercent", stockTransactionService.getInvestmentsInPercent());
         model.addAttribute("favouriteStocks", stockService.findFavouriteStocks());
+        model.addAttribute("today", LocalDate.now());
+        model.addAttribute("dollarRate", CurrencyExchange.getDollarValue());
         return "dashboard";
     }
 

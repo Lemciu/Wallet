@@ -1,4 +1,4 @@
-package pl.ml.wallet;
+package pl.ml.wallet.config;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

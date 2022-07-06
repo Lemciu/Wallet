@@ -1,11 +1,10 @@
 package pl.ml.wallet.transaction;
 
 import org.springframework.stereotype.Service;
-import pl.ml.wallet.CurrencyExchange;
+import pl.ml.wallet.currencyExchange.CurrencyExchange;
 import pl.ml.wallet.stockTransaction.stock.Stock;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;

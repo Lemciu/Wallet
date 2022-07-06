@@ -2,6 +2,8 @@ package pl.ml.wallet.stockTransaction.stock;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import pl.ml.wallet.currencyExchange.CurrencyService;
+import pl.ml.wallet.currencyExchange.DollarValue;
 import pl.ml.wallet.stockTransaction.stock.api.StockDto;
 import pl.ml.wallet.stockTransaction.stock.api.StockResponseDto;
 import pl.ml.wallet.stockTransaction.stock.dto.StockMarketDto;

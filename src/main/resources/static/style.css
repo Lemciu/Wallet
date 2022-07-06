@@ -563,8 +563,9 @@
     display: flex;
     justify-content: center;
 }
-.error h1 {
-
+.rightHead {
+    padding-top: 30px;
+    padding-right: 50px;
 }
 .error a {
     color: white;

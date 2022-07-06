@@ -5,7 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.ml.wallet.CurrencyExchange;
+import pl.ml.wallet.currencyExchange.CurrencyExchange;
 import pl.ml.wallet.stockTransaction.stock.Stock;
 import pl.ml.wallet.stockTransaction.stock.StockService;
 import pl.ml.wallet.transaction.BudgetTransactionService;
@@ -74,6 +74,7 @@ public class StockTransactionController {
         model.addAttribute("action", "buyCrypto");
         BigDecimal balance = budgetTransactionService.getCashBalance();
         model.addAttribute("balance", balance);
+        model.addAttribute("dollarRate", CurrencyExchange.getDollarValue());
         model.addAttribute("dollarBalance", CurrencyExchange.toUsd(budgetTransactionService.getCashBalance()));
         model.addAttribute("maxValue", budgetTransactionService.getMaxAmount(balance, stock));
         return "formCrypto";
@@ -89,6 +90,7 @@ public class StockTransactionController {
         model.addAttribute("stocks",  stockTransactionService.findAllOwnedStockNames());
         model.addAttribute("form", "Sell");
         model.addAttribute("action", "sellCrypto");
+        model.addAttribute("dollarRate", CurrencyExchange.getDollarValue());
         model.addAttribute("balance", budgetTransactionService.getCashBalance());
         model.addAttribute("dollarBalance", CurrencyExchange.toUsd(budgetTransactionService.getCashBalance()));
         model.addAttribute("maxValue", stockTransactionService.getAmount(symbol));

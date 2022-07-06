@@ -33,7 +33,7 @@
                             <p>Available funds</p>
                         </div>
                         <div>
-                            <h6 th:text="|PLN *{#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')} (1USD = 4.28PLN)|"></h6>
+                            <h6 th:text="|PLN *{#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')} (1USD = ${dollarRate} PLN)|"></h6>
                         </div>
                     </div>
                     <div class="stockAmount">

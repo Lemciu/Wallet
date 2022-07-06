@@ -18,6 +18,10 @@
                     <h2 th:text="|PLN *{#numbers.formatDecimal(balance, 1, 'COMMA', 2, 'POINT')}|"></h2>
                     <p>total balance</p>
                 </div>
+                <div class="rightHead">
+                    <p th:text="${today}"></p>
+                    <p th:text="|USD/PLN ${dollarRate}|"></p>
+                </div>
             </div>
         </div>
         <div class="centerDashboard">

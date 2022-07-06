@@ -1,7 +1,7 @@
 package pl.ml.wallet.stockTransaction;
 
 import org.springframework.stereotype.Service;
-import pl.ml.wallet.CurrencyExchange;
+import pl.ml.wallet.currencyExchange.CurrencyExchange;
 import pl.ml.wallet.stockTransaction.dto.*;
 import pl.ml.wallet.stockTransaction.stock.*;
 import pl.ml.wallet.stockTransaction.stock.comparator.SwapDateComparator;
